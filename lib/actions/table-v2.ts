@@ -110,7 +110,7 @@ export async function saveTablePreferencesAction(prefs: any) {
     const session = await getSession();
     if (!session) throw new Error("Unauthorized");
 
-    return await storage.saveUserTablePreference(session.id, prefs);
+    return await storage.saveUserTablePreference(session.id, "cases", prefs);
 }
 
 /**
@@ -120,7 +120,7 @@ export async function getTablePreferencesAction() {
     const session = await getSession();
     if (!session) return null;
 
-    return await storage.getUserTablePreference(session.id);
+    return await storage.getUserTablePreference(session.id, "cases");
 }
 
 /**
@@ -130,5 +130,5 @@ export async function toggleTableV2Action(enabled: boolean) {
     const session = await getSession();
     if (!session) throw new Error("Unauthorized");
 
-    return await storage.saveUserTablePreference(session.id, { useV2Table: enabled });
+    return await storage.saveUserTablePreference(session.id, "cases", { defaultViewId: enabled ? 'v2' : 'default' });
 }
