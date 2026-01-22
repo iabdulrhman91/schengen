@@ -26,11 +26,12 @@ const INITIAL_DB: {
         { id: 'agency-b', name: 'وكالة المسافر (B)' },
     ],
     users: [
-        { id: 'u1', username: 'admin', password: '123', name: 'مدير النظام', role: 'ADMIN' },
-        { id: 'u2', username: 'manager', password: '123', name: 'مدير تأشيرات', role: 'VISA_MANAGER' },
-        { id: 'u3', username: 'employee', password: '123', name: 'موظف عمليات', role: 'EMPLOYEE' },
-        { id: 'u4', username: 'agentA', password: '123', name: 'وكالة النور', role: 'AGENCY_MANAGER', agencyId: 'agency-a' },
-        { id: 'u5', username: 'agentB', password: '123', name: 'وكالة المسافر', role: 'AGENCY_MANAGER', agencyId: 'agency-b' },
+        // Password for all: 123
+        { id: 'u1', username: 'admin', password: '$2a$10$8iYvO0L5.X6f8oFz8P6PZeM6qFfN0E5K8uUo/G0YhI5n0yA3x6K6u', name: 'مدير النظام', role: 'ADMIN' },
+        { id: 'u2', username: 'manager', password: '$2a$10$8iYvO0L5.X6f8oFz8P6PZeM6qFfN0E5K8uUo/G0YhI5n0yA3x6K6u', name: 'مدير تأشيرات', role: 'VISA_MANAGER' },
+        { id: 'u3', username: 'employee', password: '$2a$10$8iYvO0L5.X6f8oFz8P6PZeM6qFfN0E5K8uUo/G0YhI5n0yA3x6K6u', name: 'موظف عمليات', role: 'EMPLOYEE' },
+        { id: 'u4', username: 'agentA', password: '$2a$10$8iYvO0L5.X6f8oFz8P6PZeM6qFfN0E5K8uUo/G0YhI5n0yA3x6K6u', name: 'وكالة النور', role: 'AGENCY_MANAGER', agencyId: 'agency-a' },
+        { id: 'u5', username: 'agentB', password: '$2a$10$8iYvO0L5.X6f8oFz8P6PZeM6qFfN0E5K8uUo/G0YhI5n0yA3x6K6u', name: 'وكالة المسافر', role: 'AGENCY_MANAGER', agencyId: 'agency-b' },
     ],
     appointments: [
         { id: 'appt-1', code: 'APPT-SMALL', countryId: 'c1', locationId: 'l1', date: '2024-12-20', capacity: 1, status: 'OPEN' },
