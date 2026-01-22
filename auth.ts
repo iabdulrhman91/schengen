@@ -23,6 +23,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
         if (!username || !password) return null
 
+        // CRITICAL: Dynamic import to avoid including 'fs' in edge runtime (middleware)
+        const { storage } = await import("@/lib/storage");
+
         const user = await storage.getUserByUsername(username)
         if (!user || !user.password) return null
 
