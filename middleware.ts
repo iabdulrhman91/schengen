@@ -8,8 +8,7 @@ export async function middleware(req: NextRequest) {
   try {
     token = await getToken({
       req,
-      secret: process.env.AUTH_SECRET,
-      salt: process.env.AUTH_SECRET ? 'authjs.session-token' : undefined
+      secret: process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET,
     });
   } catch (e) {
     console.error("Middleware Token Error:", e);

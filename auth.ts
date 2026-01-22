@@ -21,7 +21,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         if (!user || !user.password) return null
 
         // In a real app with hashed passwords:
-        const isValid = await compare(password, user.password)
+        // Support both hashed and plain text for initial setup
+        const isValid = (await compare(password, user.password).catch(() => false)) || (password === user.password);
         if (!isValid) return null;
 
         // Return user without password
