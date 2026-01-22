@@ -1,6 +1,5 @@
 import NextAuth from "next-auth"
 import Credentials from "next-auth/providers/credentials"
-import { storage } from "@/lib/storage"
 import { compare } from "bcryptjs"
 import { Role } from "@/lib/storage/types"
 
