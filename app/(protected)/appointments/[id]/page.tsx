@@ -22,8 +22,8 @@ export default async function AppointmentDetailsPage({ params }: { params: { id:
     // Fetch Cases
     const cases = await storage.getCases({ appointmentId: appointment.id });
 
-    const confirmed = cases.filter(c => c.appointmentStatus === 'CONFIRMED' && c.lockStatus === 'SUBMITTED');
-    const waiting = cases.filter(c => c.appointmentStatus === 'WAITING' && c.lockStatus === 'SUBMITTED');
+    const confirmed = cases.filter(c => c.statusId === 'os-ready' && c.lockStatus === 'SUBMITTED');
+    const waiting = cases.filter(c => c.statusId === 'os-new' && c.lockStatus === 'SUBMITTED');
 
     // Logic: Can Promote?
     const isAuthorized = session.role === 'ADMIN' || session.role === 'VISA_MANAGER';

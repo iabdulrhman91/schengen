@@ -178,11 +178,14 @@ export class JsonStorage implements IStorage {
     }
 
     // Cases
-    async getCases(filter?: { agencyId?: string }): Promise<Case[]> {
+    async getCases(filter?: { agencyId?: string; appointmentId?: string }): Promise<Case[]> {
         const db = this.readDb();
         let cases = db.cases || [];
         if (filter?.agencyId) {
             cases = cases.filter(c => c.agencyId === filter.agencyId);
+        }
+        if (filter?.appointmentId) {
+            cases = cases.filter(c => c.appointmentId === filter.appointmentId);
         }
         return cases;
     }

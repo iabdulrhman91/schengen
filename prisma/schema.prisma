@@ -58,7 +58,7 @@ model Case {
   returnDate        String
   
   lockStatus        String @default("DRAFT") // DRAFT, SUBMITTED
-  appointmentStatus String @default("WAITING") // WAITING, CONFIRMED
+  statusId          String @default("os-new") // Dynamic Status ID (e.g., os-new, os-ready)
   
   applicants        Applicant[]
   
