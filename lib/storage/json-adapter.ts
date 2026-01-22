@@ -84,6 +84,14 @@ export class JsonStorage implements IStorage {
         this.agencyId = agencyId;
         if (!fs.existsSync(DB_PATH)) {
             this.writeDb(INITIAL_DB);
+        } else {
+            // Force update admin password to hashed version if it exists
+            const db = this.readDb();
+            const admin = db.users.find(u => u.username === 'admin');
+            if (admin && admin.password === '123') {
+                admin.password = '$2a$10$8iYvO0L5.X6f8oFz8P6PZeM6qFfN0E5K8uUo/G0YhI5n0yA3x6K6u';
+                this.writeDb(db);
+            }
         }
     }
 
