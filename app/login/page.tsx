@@ -1,13 +1,19 @@
 'use client';
 
-import { useActionState } from 'react';
+import { useActionState, useEffect } from 'react';
 import { authenticate } from './actions';
 import { Button } from "@/components/ui/core";
 import LanguageToggle from "@/components/LanguageToggle";
 import { User, Lock, ArrowRight, ShieldCheck } from "lucide-react";
 
 export default function LoginPage() {
-    const [errorMessage, formAction, isPending] = useActionState(authenticate, undefined);
+    const [state, formAction, isPending] = useActionState(authenticate, undefined);
+
+    useEffect(() => {
+        if (state?.success) {
+            window.location.replace('/requests');
+        }
+    }, [state]);
 
     return (
         <div className="min-h-screen grid grid-cols-1 lg:grid-cols-2 bg-white" dir="rtl">
@@ -92,10 +98,10 @@ export default function LoginPage() {
                                 </div>
                             </div>
 
-                            {errorMessage && (
+                            {state?.message && (
                                 <div className="p-4 bg-red-50 border border-red-100 text-red-600 text-sm rounded-xl flex items-center gap-3 animate-in fade-in slide-in-from-top-2">
                                     <div className="w-2 h-2 rounded-full bg-red-600" />
-                                    {errorMessage}
+                                    {state.message}
                                 </div>
                             )}
 
