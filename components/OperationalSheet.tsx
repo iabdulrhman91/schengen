@@ -37,7 +37,7 @@ import { restrictToVerticalAxis, restrictToWindowEdges } from '@dnd-kit/modifier
 import { useRouter } from "next/navigation";
 import { useState, useRef, useEffect, useMemo } from "react";
 import { cn } from "@/components/ui/core";
-import { FilterBar } from "@/app/requests/components/FilterBar";
+import { FilterBar } from "@/components/requests/FilterBar";
 import { evaluateRow } from "@/lib/filters/evaluateRow";
 import { FilterSpec } from "@/lib/filters/types";
 
