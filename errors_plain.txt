@@ -1,0 +1,43 @@
+﻿app/(protected)/appointments/new/appointment-form.tsx(37,64): error TS2554: Expected 1 arguments, but got 2.
+app/(protected)/appointments/new/appointment-form.tsx(38,27): error TS2322: Type 'Country | { success: boolean; data: Country; error?: undefined; } | { success: boolean; error: any; data?: undefined; }' is not assignable to type 'Country'.
+  Type '{ success: boolean; data: Country; error?: undefined; }' is missing the following properties from type 'Country': id, name_ar, code, is_active
+app/(protected)/appointments/new/appointment-form.tsx(38,41): error TS2322: Type '{ success: boolean; data: Country; error?: undefined; } | { success: boolean; error: any; data?: undefined; }' is not assignable to type 'Country'.
+  Type '{ success: boolean; data: Country; error?: undefined; }' is missing the following properties from type 'Country': id, name_ar, code, is_active
+app/(protected)/appointments/new/appointment-form.tsx(39,43): error TS2339: Property 'id' does not exist on type '{ success: boolean; data: Country; error?: undefined; } | { success: boolean; error: any; data?: undefined; }'.
+  Property 'id' does not exist on type '{ success: boolean; data: Country; error?: undefined; }'.
+app/(protected)/appointments/new/appointment-form.tsx(81,30): error TS2345: Argument of type '(Country | { success: boolean; data: Country; error?: undefined; } | { success: boolean; error: any; data?: undefined; })[]' is not assignable to parameter of type 'SetStateAction<Country[]>'.
+  Type '(Country | { success: boolean; data: Country; error?: undefined; } | { success: boolean; error: any; data?: undefined; })[]' is not assignable to type 'Country[]'.
+    Type 'Country | { success: boolean; data: Country; error?: undefined; } | { success: boolean; error: any; data?: undefined; }' is not assignable to type 'Country'.
+      Type '{ success: boolean; data: Country; error?: undefined; }' is missing the following properties from type 'Country': id, name_ar, code, is_active
+app/(protected)/appointments/new/appointment-form.tsx(111,27): error TS2322: Type 'Location | { success: boolean; data: Location; error?: undefined; } | { success: boolean; error: any; data?: undefined; }' is not assignable to type 'Location'.
+  Type '{ success: boolean; data: Location; error?: undefined; }' is missing the following properties from type 'Location': id, name_ar, is_active
+app/(protected)/appointments/new/appointment-form.tsx(111,41): error TS2322: Type '{ success: boolean; data: Location; error?: undefined; } | { success: boolean; error: any; data?: undefined; }' is not assignable to type 'Location'.
+  Type '{ success: boolean; data: Location; error?: undefined; }' is missing the following properties from type 'Location': id, name_ar, is_active
+app/(protected)/appointments/new/appointment-form.tsx(112,36): error TS2339: Property 'id' does not exist on type '{ success: boolean; data: Location; error?: undefined; } | { success: boolean; error: any; data?: undefined; }'.
+  Property 'id' does not exist on type '{ success: boolean; data: Location; error?: undefined; }'.
+components/CaseCreationWizard.tsx(267,33): error TS2739: Type 'PassengerData' is missing the following properties from type 'PassengerData': nationality, sex, birthDate
+components/VisualAppointmentPicker.tsx(29,62): error TS2551: Property 'country' does not exist on type 'Appointment'. Did you mean 'countryId'?
+components/VisualAppointmentPicker.tsx(39,32): error TS2551: Property 'country' does not exist on type 'Appointment'. Did you mean 'countryId'?
+components/VisualAppointmentPicker.tsx(40,29): error TS2339: Property 'city' does not exist on type 'Appointment'.
+components/VisualAppointmentPicker.tsx(173,31): error TS2551: Property 'country' does not exist on type 'Appointment'. Did you mean 'countryId'?
+components/VisualAppointmentPicker.tsx(174,49): error TS2339: Property 'city' does not exist on type 'Appointment'.
+lib/ocr-helper.ts(27,24): error TS2339: Property 'lines' does not exist on type 'Page'.
+lib/ocr-helper.ts(31,38): error TS7006: Parameter 'l' implicitly has an 'any' type.
+lib/ocr-helper.ts(41,29): error TS7006: Parameter 'a' implicitly has an 'any' type.
+lib/ocr-helper.ts(41,32): error TS7006: Parameter 'b' implicitly has an 'any' type.
+lib/ocr-helper.ts(48,55): error TS7006: Parameter 'l' implicitly has an 'any' type.
+lib/ocr-helper.ts(49,55): error TS7006: Parameter 'l' implicitly has an 'any' type.
+lib/ocr-helper.ts(50,55): error TS7006: Parameter 'l' implicitly has an 'any' type.
+lib/ocr-helper.ts(51,55): error TS7006: Parameter 'l' implicitly has an 'any' type.
+lib/ocr-helper.ts(68,39): error TS2339: Property 'lines' does not exist on type 'Page'.
+lib/ocr-helper.ts(68,49): error TS7006: Parameter 'l' implicitly has an 'any' type.
+lib/ocr-helper.ts(72,41): error TS7006: Parameter 'l' implicitly has an 'any' type.
+lib/ocr-helper.ts(100,13): error TS2322: Type 'string | null | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+lib/ocr-helper.ts(101,13): error TS2322: Type 'string | null | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+lib/ocr-helper.ts(102,13): error TS2322: Type 'string | null | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+lib/ocr-helper.ts(103,46): error TS2345: Argument of type 'string | null | undefined' is not assignable to parameter of type 'string | null'.
+  Type 'undefined' is not assignable to type 'string | null'.
+lib/ocr-helper.ts(104,54): error TS2339: Property 'expiryDate' does not exist on type 'Partial<Record<FieldName, string | null>>'.

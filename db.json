@@ -1,0 +1,534 @@
+{
+    "agencies": [
+        {
+            "id": "tejwal",
+            "name": "مدير النظام"
+        },
+        {
+            "id": "agency-a",
+            "name": "وكالة النور (A)"
+        },
+        {
+            "id": "agency-b",
+            "name": "وكالة الأمل (B)"
+        }
+    ],
+    "countries": [
+        {
+            "id": "c3",
+            "name_ar": "ألمانيا",
+            "code": "DE",
+            "is_active": false,
+            "iso_code": "DE",
+            "flag_emoji": "de"
+        },
+        {
+            "id": "c4",
+            "name_ar": "إيطاليا",
+            "code": "IT",
+            "is_active": true,
+            "iso_code": "IT",
+            "flag_emoji": "it"
+        },
+        {
+            "id": "fzqmqc",
+            "name_ar": "تركيا",
+            "code": "C-1790",
+            "is_active": true,
+            "iso_code": "tr"
+        },
+        {
+            "id": "ey2zd5b",
+            "name_ar": "إسبانيا",
+            "code": "C-2512",
+            "flag_emoji": "<span class=\"fi fi-es\"></span>",
+            "is_active": true,
+            "iso_code": "es"
+        },
+        {
+            "id": "i30ly",
+            "name_ar": "فرنسا",
+            "code": "C-7409",
+            "iso_code": "fr",
+            "is_active": true
+        },
+        {
+            "id": "h0jkn",
+            "name_ar": "سويسرا",
+            "code": "CH",
+            "iso_code": "ch",
+            "is_active": true
+        },
+        {
+            "id": "nnfwc8",
+            "name_ar": "تركيا",
+            "code": "TK",
+            "iso_code": "TK",
+            "is_active": true
+        },
+        {
+            "id": "uwee0l",
+            "name_ar": "الإمارات",
+            "code": "SA",
+            "iso_code": "SA",
+            "is_active": false
+        }
+    ],
+    "locations": [
+        {
+            "id": "l1",
+            "name_ar": "الرياض",
+            "is_active": false
+        },
+        {
+            "id": "l2",
+            "name_ar": "جدة",
+            "is_active": true
+        },
+        {
+            "id": "l3",
+            "name_ar": "الدمام",
+            "is_active": true
+        },
+        {
+            "id": "8r8vso",
+            "name_ar": "خميس مشيط",
+            "is_active": true
+        },
+        {
+            "id": "es08o",
+            "name_ar": "جيزان",
+            "is_active": true
+        }
+    ],
+    "users": [
+        {
+            "id": "u1",
+            "username": "admin",
+            "password": "$2b$10$HJyLMyGCsOzafxfMcOyCYuxoond3k3aTsKNcVShZAqAbZMRsKqI.K",
+            "name": "مدير النظام",
+            "role": "ADMIN",
+            "createdAt": "2026-01-03T10:30:45.340Z"
+        },
+        {
+            "id": "u2",
+            "username": "visa_mgr",
+            "password": "$2b$10$HJyLMyGCsOzafxfMcOyCYuxoond3k3aTsKNcVShZAqAbZMRsKqI.K",
+            "name": "مسؤول التأشيرات",
+            "role": "VISA_MANAGER",
+            "createdAt": "2026-01-03T10:30:45.340Z"
+        },
+        {
+            "id": "u3",
+            "username": "agent_a",
+            "password": "$2b$10$HJyLMyGCsOzafxfMcOyCYuxoond3k3aTsKNcVShZAqAbZMRsKqI.K",
+            "name": "مدير وكالة النور",
+            "role": "AGENCY_MANAGER",
+            "agencyId": "agency-a",
+            "createdAt": "2026-01-03T10:30:45.340Z"
+        },
+        {
+            "id": "u4",
+            "username": "user_a",
+            "password": "$2b$10$HJyLMyGCsOzafxfMcOyCYuxoond3k3aTsKNcVShZAqAbZMRsKqI.K",
+            "name": "موظف وكالة النور",
+            "role": "AGENCY_USER",
+            "agencyId": "agency-a",
+            "createdAt": "2026-01-03T10:30:45.340Z"
+        },
+        {
+            "id": "u5",
+            "username": "agent_b",
+            "password": "$2b$10$HJyLMyGCsOzafxfMcOyCYuxoond3k3aTsKNcVShZAqAbZMRsKqI.K",
+            "name": "مدير وكالة الأمل",
+            "role": "AGENCY_MANAGER",
+            "agencyId": "agency-b",
+            "createdAt": "2026-01-03T10:30:45.340Z"
+        },
+        {
+            "id": "u6",
+            "username": "sales_tejwal",
+            "password": "$2b$10$HJyLMyGCsOzafxfMcOyCYuxoond3k3aTsKNcVShZAqAbZMRsKqI.K",
+            "name": "موظف مبيعات تجوال",
+            "role": "ADMIN",
+            "agencyId": "tejwal",
+            "createdAt": "2026-01-03T19:00:00.000Z"
+        }
+    ],
+    "appointments": [
+        {
+            "code": "APT-AGSSL",
+            "countryId": "ey2zd5b",
+            "locationId": "8r8vso",
+            "date": "2026-01-07",
+            "capacity": 30,
+            "capacity_vip": 0,
+            "status": "OPEN",
+            "id": "0405033"
+        },
+        {
+            "code": "APT-392HM",
+            "countryId": "ey2zd5b",
+            "locationId": "8r8vso",
+            "date": "2026-01-06",
+            "capacity": 35,
+            "capacity_vip": 20,
+            "status": "OPEN",
+            "id": "3350722"
+        },
+        {
+            "code": "APT-V9615",
+            "countryId": "i30ly",
+            "locationId": "8r8vso",
+            "date": "2026-01-06",
+            "capacity": 30,
+            "capacity_vip": 0,
+            "status": "OPEN",
+            "id": "8308006"
+        }
+    ],
+    "cases": [],
+    "amendmentRequests": [],
+    "webhookLogs": [
+        {
+            "event": "CASE_SUBMITTED",
+            "status": "FAILED",
+            "payload": "{\"case\":{\"id\":\"8370248\",\"fileNumber\":\"WIZ-I0OOB\",\"status\":\"SUBMITTED\",\"appointmentStatus\":\"CONFIRMED\"},\"agency\":{\"id\":\"tejwal\",\"name\":\"وكالة تجوال (الأم)\"},\"appointment\":{\"id\":\"0405033\",\"code\":\"APT-AGSSL\",\"date\":\"2026-01-07\"},\"mainApplicant\":{\"id\":\"adt1fn\",\"name\":\"BURAYK, YASIR ALI S\"},\"meta\":{\"triggeredBy\":\"admin\",\"timestamp\":\"2026-01-09T15:18:03.811Z\"}}",
+            "id": "bf8e7ea9-0a52-48e6-b725-6879ac2e01fd",
+            "eventId": "84733f78-983f-4ac5-ad2d-067eed43564b",
+            "createdAt": "2026-01-09T15:18:03.811Z",
+            "errorMessage": "fetch failed",
+            "processedAt": "2026-01-09T15:18:04.109Z",
+            "updatedAt": "2026-01-09T15:18:04.110Z"
+        },
+        {
+            "event": "CASE_SUBMITTED",
+            "status": "FAILED",
+            "payload": "{\"case\":{\"id\":\"9503937\",\"fileNumber\":\"WIZ-J2GIG\",\"status\":\"SUBMITTED\",\"appointmentStatus\":\"CONFIRMED\"},\"agency\":{\"id\":\"tejwal\",\"name\":\"وكالة تجوال (الأم)\"},\"appointment\":{\"id\":\"0405033\",\"code\":\"APT-AGSSL\",\"date\":\"2026-01-07\"},\"mainApplicant\":{\"id\":\"x5eqi5\",\"name\":\"SHAIMAA MOHAMED ELKOTB ELGABRY\"},\"meta\":{\"triggeredBy\":\"admin\",\"timestamp\":\"2026-01-09T16:46:19.987Z\"}}",
+            "id": "34dfcf57-b9eb-45af-a1be-c652163f6067",
+            "eventId": "babe41bd-71e8-446d-a2d2-60ad2a1c5cf6",
+            "createdAt": "2026-01-09T16:46:19.987Z",
+            "errorMessage": "fetch failed",
+            "processedAt": "2026-01-09T16:46:20.317Z",
+            "updatedAt": "2026-01-09T16:46:20.318Z"
+        },
+        {
+            "event": "CASE_SUBMITTED",
+            "status": "FAILED",
+            "payload": "{\"case\":{\"id\":\"0094517\",\"fileNumber\":\"WIZ-9XEQG\",\"status\":\"SUBMITTED\",\"appointmentStatus\":\"CONFIRMED\"},\"agency\":{\"id\":\"tejwal\",\"name\":\"وكالة تجوال (الأم)\"},\"appointment\":{\"id\":\"0405033\",\"code\":\"APT-AGSSL\",\"date\":\"2026-01-07\"},\"mainApplicant\":{\"id\":\"ey2o7\",\"name\":\"SHAIMAA MOHAMED ELKOTB ELGABRY\"},\"meta\":{\"triggeredBy\":\"admin\",\"timestamp\":\"2026-01-09T17:29:55.749Z\"}}",
+            "id": "2a3f6add-21db-4cd3-bc36-aff469caa567",
+            "eventId": "7e11ed57-93d4-4d09-af61-d330b9383929",
+            "createdAt": "2026-01-09T17:29:55.749Z",
+            "errorMessage": "fetch failed",
+            "processedAt": "2026-01-09T17:29:56.088Z",
+            "updatedAt": "2026-01-09T17:29:56.089Z"
+        },
+        {
+            "event": "CASE_SUBMITTED",
+            "status": "FAILED",
+            "payload": "{\"case\":{\"id\":\"case-honitu\",\"fileNumber\":\"WIZ-4BD0P\",\"status\":\"SUBMITTED\",\"stage\":\"os-ready\"},\"agency\":{\"id\":\"tejwal\",\"name\":\"وكالة تجوال (الأم)\"},\"appointment\":{\"id\":\"0405033\",\"code\":\"APT-AGSSL\",\"date\":\"2026-01-07\"},\"mainApplicant\":{\"id\":\"n331kd\",\"name\":\"MOUSTAFA MOHAMED MOHAMED ELKADY\"},\"meta\":{\"triggeredBy\":\"admin\",\"timestamp\":\"2026-01-10T18:54:08.276Z\"}}",
+            "id": "9a5276ae-0882-40c9-9083-2195d50fcea6",
+            "eventId": "768b66f2-8d62-400a-a74f-5f931aacb727",
+            "createdAt": "2026-01-10T18:54:08.276Z",
+            "errorMessage": "fetch failed",
+            "processedAt": "2026-01-10T18:54:08.566Z"
+        },
+        {
+            "event": "CASE_SUBMITTED",
+            "status": "FAILED",
+            "payload": "{\"case\":{\"id\":\"case-36xv8b\",\"fileNumber\":\"WIZ-F8K0T\",\"status\":\"SUBMITTED\",\"stage\":\"os-ready\"},\"agency\":{\"id\":\"tejwal\",\"name\":\"وكالة تجوال (الأم)\"},\"appointment\":{\"id\":\"0405033\",\"code\":\"APT-AGSSL\",\"date\":\"2026-01-07\"},\"mainApplicant\":{\"id\":\"cxf2j\",\"name\":\"BURAYK, YASIR ALI S\"},\"meta\":{\"triggeredBy\":\"admin\",\"timestamp\":\"2026-01-22T13:00:14.959Z\"}}",
+            "id": "bbbee562-d93e-4afe-86d7-6ee40e5f0b16",
+            "eventId": "310e7679-59f9-44e4-9bcf-683643cb3869",
+            "createdAt": "2026-01-22T13:00:14.959Z",
+            "errorMessage": "fetch failed",
+            "processedAt": "2026-01-22T13:00:15.223Z"
+        },
+        {
+            "event": "CASE_SUBMITTED",
+            "status": "FAILED",
+            "payload": "{\"case\":{\"id\":\"case-eg60y7\",\"fileNumber\":\"WIZ-QRIJM\",\"status\":\"SUBMITTED\",\"stage\":\"os-ready\"},\"agency\":{\"id\":\"tejwal\",\"name\":\"وكالة تجوال (الأم)\"},\"appointment\":{\"id\":\"0405033\",\"code\":\"APT-AGSSL\",\"date\":\"2026-01-07\"},\"mainApplicant\":{\"id\":\"e2m7vn\",\"name\":\"SHAlMAA MOHAMED ELKOTB ELGABRY\"},\"meta\":{\"triggeredBy\":\"admin\",\"timestamp\":\"2026-01-22T13:02:49.228Z\"}}",
+            "id": "3962df08-1c4d-48d7-bf90-c3fd11a83170",
+            "eventId": "cb8c8ec5-b5d0-4abf-91a9-493a212e331b",
+            "createdAt": "2026-01-22T13:02:49.228Z",
+            "errorMessage": "fetch failed",
+            "processedAt": "2026-01-22T13:02:49.386Z"
+        },
+        {
+            "event": "CASE_SUBMITTED",
+            "status": "FAILED",
+            "payload": "{\"case\":{\"id\":\"case-lj5gwf\",\"fileNumber\":\"WIZ-YTB52\",\"status\":\"SUBMITTED\",\"stage\":\"os-ready\"},\"agency\":{\"id\":\"tejwal\",\"name\":\"وكالة تجوال (الأم)\"},\"appointment\":{\"id\":\"3350722\",\"code\":\"APT-392HM\",\"date\":\"2026-01-06\"},\"mainApplicant\":{\"id\":\"rgtyke\",\"name\":\"BURAYK, YASIR ALI S\"},\"meta\":{\"triggeredBy\":\"admin\",\"timestamp\":\"2026-01-22T13:15:48.543Z\"}}",
+            "id": "31d07971-0623-4acc-b28a-fe674c593b2d",
+            "eventId": "9c1f12e3-b240-4b72-87e7-b1cfdbe754f0",
+            "createdAt": "2026-01-22T13:15:48.543Z",
+            "errorMessage": "fetch failed",
+            "processedAt": "2026-01-22T13:15:48.760Z"
+        },
+        {
+            "event": "CASE_SUBMITTED",
+            "status": "FAILED",
+            "payload": "{\"case\":{\"id\":\"case-q27wxp\",\"fileNumber\":\"WIZ-B7SHD\",\"status\":\"SUBMITTED\",\"stage\":\"os-ready\"},\"agency\":{\"id\":\"tejwal\",\"name\":\"وكالة تجوال (الأم)\"},\"appointment\":{\"id\":\"0405033\",\"code\":\"APT-AGSSL\",\"date\":\"2026-01-07\"},\"mainApplicant\":{\"id\":\"48xqo\",\"name\":\"BURAYK, YASIR ALI S\"},\"meta\":{\"triggeredBy\":\"admin\",\"timestamp\":\"2026-01-22T13:23:22.976Z\"}}",
+            "id": "bd4f0151-aa11-4f42-9b1f-2dfa69fa025e",
+            "eventId": "f3558e52-dc9a-48f8-950d-e728e7b21eb1",
+            "createdAt": "2026-01-22T13:23:22.976Z",
+            "errorMessage": "fetch failed",
+            "processedAt": "2026-01-22T13:23:23.122Z"
+        },
+        {
+            "event": "CASE_SUBMITTED",
+            "status": "FAILED",
+            "payload": "{\"case\":{\"id\":\"case-gzj7rq\",\"fileNumber\":\"WIZ-ZNLW3\",\"status\":\"SUBMITTED\",\"stage\":\"os-ready\"},\"agency\":{\"id\":\"tejwal\",\"name\":\"وكالة تجوال (الأم)\"},\"appointment\":{\"id\":\"8308006\",\"code\":\"APT-V9615\",\"date\":\"2026-01-06\"},\"mainApplicant\":{\"id\":\"xheyo6\",\"name\":\"BURAYK, YASIR ALI S\"},\"meta\":{\"triggeredBy\":\"admin\",\"timestamp\":\"2026-01-22T13:35:30.210Z\"}}",
+            "id": "2f7ebfec-33ea-471d-b161-0356af9ad9c3",
+            "eventId": "8dd5e73a-be59-4fdd-abca-ec5cfd7662f2",
+            "createdAt": "2026-01-22T13:35:30.213Z",
+            "errorMessage": "fetch failed",
+            "processedAt": "2026-01-22T13:35:30.382Z"
+        },
+        {
+            "event": "CASE_SUBMITTED",
+            "status": "FAILED",
+            "payload": "{\"case\":{\"id\":\"case-crhf9\",\"fileNumber\":\"WIZ-NIRMJ\",\"status\":\"SUBMITTED\",\"stage\":\"os-ready\"},\"agency\":{\"id\":\"tejwal\",\"name\":\"وكالة تجوال (الأم)\"},\"appointment\":{\"id\":\"0405033\",\"code\":\"APT-AGSSL\",\"date\":\"2026-01-07\"},\"mainApplicant\":{\"id\":\"t2wifg\",\"name\":\"BURAYK, YASIR ALI S\"},\"meta\":{\"triggeredBy\":\"admin\",\"timestamp\":\"2026-01-22T13:45:19.253Z\"}}",
+            "id": "efe0f791-cb5a-40cd-8d61-4924580876d7",
+            "eventId": "5bf08121-37c9-4856-8a1f-6272eb4a520d",
+            "createdAt": "2026-01-22T13:45:19.253Z",
+            "errorMessage": "fetch failed",
+            "processedAt": "2026-01-22T13:45:19.400Z"
+        },
+        {
+            "event": "CASE_SUBMITTED",
+            "status": "FAILED",
+            "payload": "{\"case\":{\"id\":\"case-rrg8zc\",\"fileNumber\":\"WIZ-G1UR5\",\"status\":\"SUBMITTED\",\"stage\":\"os-ready\"},\"agency\":{\"id\":\"tejwal\",\"name\":\"وكالة تجوال (الأم)\"},\"appointment\":{\"id\":\"8308006\",\"code\":\"APT-V9615\",\"date\":\"2026-01-06\"},\"mainApplicant\":{\"id\":\"qqvla\",\"name\":\"BURAYK, YASIR ALI S\"},\"meta\":{\"triggeredBy\":\"admin\",\"timestamp\":\"2026-01-22T13:52:02.408Z\"}}",
+            "id": "de0a4d4e-d613-4ab1-abc9-70c7bd1d2df9",
+            "eventId": "e72285e2-7fa5-4a32-9f23-cddd31da3793",
+            "createdAt": "2026-01-22T13:52:02.408Z",
+            "errorMessage": "fetch failed",
+            "processedAt": "2026-01-22T13:52:02.594Z"
+        },
+        {
+            "event": "CASE_SUBMITTED",
+            "status": "FAILED",
+            "payload": "{\"case\":{\"id\":\"case-p203ve\",\"fileNumber\":\"WIZ-53YUR\",\"status\":\"SUBMITTED\",\"stage\":\"os-ready\"},\"agency\":{\"id\":\"tejwal\",\"name\":\"وكالة تجوال (الأم)\"},\"appointment\":{\"id\":\"3350722\",\"code\":\"APT-392HM\",\"date\":\"2026-01-06\"},\"mainApplicant\":{\"id\":\"4xxcs\",\"name\":\"BURAYK, YASIR ALI S\"},\"meta\":{\"triggeredBy\":\"admin\",\"timestamp\":\"2026-01-22T13:55:54.512Z\"}}",
+            "id": "3b28169f-bb44-44c3-a77c-ad8805f9b5df",
+            "eventId": "5d0746cf-2ef5-4fb9-8e75-c6cceccd17df",
+            "createdAt": "2026-01-22T13:55:54.512Z",
+            "errorMessage": "fetch failed",
+            "processedAt": "2026-01-22T13:55:54.667Z"
+        },
+        {
+            "event": "CASE_SUBMITTED",
+            "status": "FAILED",
+            "payload": "{\"case\":{\"id\":\"case-zkf2c\",\"fileNumber\":\"WIZ-Q5YWD\",\"status\":\"SUBMITTED\",\"stage\":\"os-ready\"},\"agency\":{\"id\":\"tejwal\",\"name\":\"وكالة تجوال (الأم)\"},\"appointment\":{\"id\":\"3350722\",\"code\":\"APT-392HM\",\"date\":\"2026-01-06\"},\"mainApplicant\":{\"id\":\"9xlfcj\",\"name\":\"BURAYK, YASIR ALI S\"},\"meta\":{\"triggeredBy\":\"admin\",\"timestamp\":\"2026-01-22T14:01:23.530Z\"}}",
+            "id": "64e804f0-1dea-4218-b076-7d57f84cf2e4",
+            "eventId": "b2abad6b-f1fc-4db8-97ff-c5ff72136e66",
+            "createdAt": "2026-01-22T14:01:23.530Z",
+            "errorMessage": "fetch failed",
+            "processedAt": "2026-01-22T14:01:23.730Z"
+        },
+        {
+            "event": "CASE_SUBMITTED",
+            "status": "FAILED",
+            "payload": "{\"case\":{\"id\":\"case-1deeci\",\"fileNumber\":\"WIZ-1LG0W\",\"status\":\"SUBMITTED\",\"stage\":\"os-ready\"},\"agency\":{\"id\":\"tejwal\",\"name\":\"وكالة تجوال (الأم)\"},\"appointment\":{\"id\":\"0405033\",\"code\":\"APT-AGSSL\",\"date\":\"2026-01-07\"},\"mainApplicant\":{\"id\":\"3nmom\",\"name\":\"\"},\"meta\":{\"triggeredBy\":\"admin\",\"timestamp\":\"2026-01-22T14:02:06.317Z\"}}",
+            "id": "1a6b3436-e8d1-4e86-bb1b-e44277001487",
+            "eventId": "5d7e308f-a819-44c2-aa33-bb6c51b98d6f",
+            "createdAt": "2026-01-22T14:02:06.317Z",
+            "errorMessage": "fetch failed",
+            "processedAt": "2026-01-22T14:02:06.463Z"
+        },
+        {
+            "event": "CASE_SUBMITTED",
+            "status": "FAILED",
+            "payload": "{\"case\":{\"id\":\"case-b4t5nr\",\"fileNumber\":\"WIZ-OBFJZ\",\"status\":\"SUBMITTED\",\"stage\":\"os-ready\"},\"agency\":{\"id\":\"tejwal\",\"name\":\"وكالة تجوال (الأم)\"},\"appointment\":{\"id\":\"0405033\",\"code\":\"APT-AGSSL\",\"date\":\"2026-01-07\"},\"mainApplicant\":{\"id\":\"7x7mb8\",\"name\":\"فيصل\"},\"meta\":{\"triggeredBy\":\"admin\",\"timestamp\":\"2026-01-22T14:04:20.948Z\"}}",
+            "id": "7b4cde85-de1b-4707-83b2-9221bbea3938",
+            "eventId": "63836cc1-80be-4df5-acbf-7dc6f5d5c722",
+            "createdAt": "2026-01-22T14:04:20.948Z",
+            "errorMessage": "fetch failed",
+            "processedAt": "2026-01-22T14:04:21.121Z"
+        },
+        {
+            "event": "CASE_SUBMITTED",
+            "status": "FAILED",
+            "payload": "{\"case\":{\"id\":\"case-jv5f1m\",\"fileNumber\":\"WIZ-4OTGQ\",\"status\":\"SUBMITTED\",\"stage\":\"os-ready\"},\"agency\":{\"id\":\"tejwal\",\"name\":\"وكالة تجوال (الأم)\"},\"appointment\":{\"id\":\"0405033\",\"code\":\"APT-AGSSL\",\"date\":\"2026-01-07\"},\"mainApplicant\":{\"id\":\"uuv11n\",\"name\":\"يبلبيل\"},\"meta\":{\"triggeredBy\":\"admin\",\"timestamp\":\"2026-01-22T14:06:16.268Z\"}}",
+            "id": "c74819ba-9af3-40d8-893a-faf4b052dc7d",
+            "eventId": "c6eb6b65-a22e-4f1b-91db-7db022d09e84",
+            "createdAt": "2026-01-22T14:06:16.270Z",
+            "errorMessage": "fetch failed",
+            "processedAt": "2026-01-22T14:06:16.419Z"
+        },
+        {
+            "event": "CASE_SUBMITTED",
+            "status": "FAILED",
+            "payload": "{\"case\":{\"id\":\"case-0kaqpr\",\"fileNumber\":\"WIZ-FBPMA\",\"status\":\"SUBMITTED\",\"stage\":\"os-ready\"},\"agency\":{\"id\":\"tejwal\",\"name\":\"وكالة تجوال (الأم)\"},\"appointment\":{\"id\":\"0405033\",\"code\":\"APT-AGSSL\",\"date\":\"2026-01-07\"},\"mainApplicant\":{\"id\":\"xtrxsq\",\"name\":\"حامد\"},\"meta\":{\"triggeredBy\":\"admin\",\"timestamp\":\"2026-01-22T14:08:21.124Z\"}}",
+            "id": "2c9913fd-b125-478e-a950-1d4f92b85625",
+            "eventId": "5fd20799-bf8f-4884-aebd-5edeae4461a8",
+            "createdAt": "2026-01-22T14:08:21.124Z",
+            "errorMessage": "fetch failed",
+            "processedAt": "2026-01-22T14:08:21.315Z"
+        },
+        {
+            "event": "CASE_SUBMITTED",
+            "status": "FAILED",
+            "payload": "{\"case\":{\"id\":\"case-xb406\",\"fileNumber\":\"WIZ-6JJQF\",\"status\":\"SUBMITTED\",\"stage\":\"os-ready\"},\"agency\":{\"id\":\"tejwal\",\"name\":\"وكالة تجوال (الأم)\"},\"appointment\":{\"id\":\"3350722\",\"code\":\"APT-392HM\",\"date\":\"2026-01-06\"},\"mainApplicant\":{\"id\":\"yqqeks\",\"name\":\"لل\"},\"meta\":{\"triggeredBy\":\"admin\",\"timestamp\":\"2026-01-22T14:10:52.317Z\"}}",
+            "id": "9a1b8fab-fa19-4c58-b165-7392a1d2d410",
+            "eventId": "db4f93a1-7d0a-43fa-a1cf-8bac789ecd1d",
+            "createdAt": "2026-01-22T14:10:52.317Z",
+            "errorMessage": "fetch failed",
+            "processedAt": "2026-01-22T14:10:52.467Z"
+        },
+        {
+            "event": "CASE_SUBMITTED",
+            "status": "FAILED",
+            "payload": "{\"case\":{\"id\":\"case-vv9oyj\",\"fileNumber\":\"WIZ-NZ5BA\",\"status\":\"SUBMITTED\",\"stage\":\"os-ready\"},\"agency\":{\"id\":\"tejwal\",\"name\":\"وكالة تجوال (الأم)\"},\"appointment\":{\"id\":\"0405033\",\"code\":\"APT-AGSSL\",\"date\":\"2026-01-07\"},\"mainApplicant\":{\"id\":\"7iuwvn\",\"name\":\"\"},\"meta\":{\"triggeredBy\":\"admin\",\"timestamp\":\"2026-01-22T14:14:15.340Z\"}}",
+            "id": "f0c0180f-2d29-44a8-93f7-738b0634cd4a",
+            "eventId": "def9f2bf-bc26-4dda-9011-f54b581c3632",
+            "createdAt": "2026-01-22T14:14:15.340Z",
+            "errorMessage": "fetch failed",
+            "processedAt": "2026-01-22T14:14:15.511Z"
+        },
+        {
+            "event": "CASE_SUBMITTED",
+            "status": "FAILED",
+            "payload": "{\"case\":{\"id\":\"case-ub58k9\",\"fileNumber\":\"WIZ-YX1KA\",\"status\":\"SUBMITTED\",\"stage\":\"os-ready\"},\"agency\":{\"id\":\"tejwal\",\"name\":\"وكالة تجوال (الأم)\"},\"appointment\":{\"id\":\"0405033\",\"code\":\"APT-AGSSL\",\"date\":\"2026-01-07\"},\"mainApplicant\":{\"id\":\"h8liui\",\"name\":\"\"},\"meta\":{\"triggeredBy\":\"admin\",\"timestamp\":\"2026-01-22T14:21:20.400Z\"}}",
+            "id": "62e32504-5ed3-49de-a0b1-070dfdcd6911",
+            "eventId": "2a7ba9a2-73cc-4c54-80c9-8d4dcd9d314f",
+            "createdAt": "2026-01-22T14:21:20.400Z",
+            "errorMessage": "fetch failed",
+            "processedAt": "2026-01-22T14:21:20.584Z"
+        },
+        {
+            "event": "CASE_SUBMITTED",
+            "status": "FAILED",
+            "payload": "{\"case\":{\"id\":\"case-ew1sbk\",\"fileNumber\":\"WIZ-Q4EM3\",\"status\":\"SUBMITTED\",\"stage\":\"os-ready\"},\"agency\":{\"id\":\"tejwal\",\"name\":\"وكالة تجوال (الأم)\"},\"appointment\":{\"id\":\"0405033\",\"code\":\"APT-AGSSL\",\"date\":\"2026-01-07\"},\"mainApplicant\":{\"id\":\"o8yl0c\",\"name\":\"\"},\"meta\":{\"triggeredBy\":\"admin\",\"timestamp\":\"2026-01-22T17:23:22.875Z\"}}",
+            "id": "76fd11b3-7b46-4238-bf56-cba4bc3328a9",
+            "eventId": "40da6786-87e5-4b39-9d50-c77844cdb686",
+            "createdAt": "2026-01-22T17:23:22.876Z",
+            "errorMessage": "fetch failed",
+            "processedAt": "2026-01-22T17:23:23.115Z"
+        },
+        {
+            "event": "CASE_SUBMITTED",
+            "status": "FAILED",
+            "payload": "{\"case\":{\"id\":\"case-voc8u\",\"fileNumber\":\"WIZ-W59LH\",\"status\":\"SUBMITTED\",\"stage\":\"os-ready\"},\"agency\":{\"id\":\"tejwal\",\"name\":\"وكالة تجوال (الأم)\"},\"appointment\":{\"id\":\"3350722\",\"code\":\"APT-392HM\",\"date\":\"2026-01-06\"},\"mainApplicant\":{\"id\":\"tgsr5\",\"name\":\"بلبل\"},\"meta\":{\"triggeredBy\":\"admin\",\"timestamp\":\"2026-01-22T18:07:08.369Z\"}}",
+            "id": "c0713b13-7b8a-40f6-bf7f-306db1fbd0d1",
+            "eventId": "eb4d0863-b869-468c-92f4-86dc024cd156",
+            "createdAt": "2026-01-22T18:07:08.370Z",
+            "errorMessage": "fetch failed",
+            "processedAt": "2026-01-22T18:07:08.576Z"
+        }
+    ],
+    "priceBooks": [
+        {
+            "id": "pb-1767699944142",
+            "countryId": "ey2zd5b",
+            "name": "Spain Base 2026 (Auto-Created)",
+            "currency": "SAR",
+            "is_active": true,
+            "is_default_for_country": true,
+            "normal_adult_price": 1600,
+            "normal_child_price": 1450,
+            "normal_infant_price": 1250,
+            "vip_adult_price": 2000,
+            "vip_child_price": 2000,
+            "vip_infant_price": 2000,
+            "createdAt": "2026-01-06T11:45:44.142Z",
+            "updatedAt": "2026-01-06T15:00:20.458Z"
+        },
+        {
+            "id": "pb-1767729569499",
+            "countryId": "i30ly",
+            "name": "فرنسا - عام - 2026",
+            "currency": "SAR",
+            "is_active": true,
+            "is_default_for_country": true,
+            "normal_adult_price": 1500,
+            "normal_child_price": 1300,
+            "normal_infant_price": 1100,
+            "vip_adult_price": 1600,
+            "vip_child_price": 1600,
+            "vip_infant_price": 1600,
+            "is_deleted": false,
+            "createdAt": "2026-01-06T19:59:29.499Z",
+            "updatedAt": "2026-01-06T19:59:42.418Z"
+        }
+    ],
+    "priceOverrides": [
+        {
+            "id": "po-1767699944145",
+            "scope": "APPOINTMENT",
+            "countryId": "ey2zd5b",
+            "appointmentId": "0405033",
+            "modifierType": "DISCOUNT_AMOUNT",
+            "value": 50,
+            "seatType": "NORMAL",
+            "passengerType": "ADULT",
+            "is_active": false,
+            "createdAt": "2026-01-06T11:45:44.145Z",
+            "updatedAt": "2026-01-06T11:45:44.147Z"
+        },
+        {
+            "id": "po-1767699944241",
+            "scope": "APPOINTMENT",
+            "countryId": "ey2zd5b",
+            "appointmentId": "0405033",
+            "modifierType": "DISCOUNT_AMOUNT",
+            "value": 50,
+            "seatType": "NORMAL",
+            "passengerType": "ADULT",
+            "is_active": false,
+            "createdAt": "2026-01-06T11:45:44.241Z",
+            "updatedAt": "2026-01-06T11:45:44.242Z"
+        },
+        {
+            "id": "po-1767699944305",
+            "scope": "APPOINTMENT",
+            "countryId": "ey2zd5b",
+            "appointmentId": "0405033",
+            "modifierType": "DISCOUNT_AMOUNT",
+            "value": 50,
+            "seatType": "NORMAL",
+            "passengerType": "ADULT",
+            "is_active": false,
+            "createdAt": "2026-01-06T11:45:44.305Z",
+            "updatedAt": "2026-01-06T11:45:44.306Z"
+        },
+        {
+            "id": "po-1767699944369",
+            "scope": "APPOINTMENT",
+            "countryId": "ey2zd5b",
+            "appointmentId": "0405033",
+            "modifierType": "DISCOUNT_AMOUNT",
+            "value": 50,
+            "seatType": "NORMAL",
+            "passengerType": "ADULT",
+            "is_active": false,
+            "createdAt": "2026-01-06T11:45:44.369Z",
+            "updatedAt": "2026-01-06T11:45:44.370Z"
+        },
+        {
+            "id": "po-1767699949087",
+            "scope": "APPOINTMENT",
+            "countryId": "ey2zd5b",
+            "appointmentId": "0405033",
+            "modifierType": "DISCOUNT_AMOUNT",
+            "value": 50,
+            "seatType": "NORMAL",
+            "passengerType": "ADULT",
+            "is_active": false,
+            "createdAt": "2026-01-06T11:45:49.087Z",
+            "updatedAt": "2026-01-06T11:45:49.089Z"
+        },
+        {
+            "id": "po-1767727939993",
+            "countryId": "ey2zd5b",
+            "locationId": "8r8vso",
+            "scope": "CITY",
+            "modifierType": "DISCOUNT_AMOUNT",
+            "value": 200,
+            "seatType": "ALL",
+            "passengerType": "ALL",
+            "is_active": false,
+            "is_deleted": false,
+            "createdAt": "2026-01-06T19:32:19.993Z",
+            "updatedAt": "2026-01-06T19:33:23.451Z"
+        }
+    ],
+    "userPreferences": []
+}

@@ -1,0 +1,128 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+// Role Enum
+enum Role {
+  ADMIN          // المدير العام
+  VISA_MANAGER   // مسؤول التأشيرات
+  EMPLOYEE       // موظف داخلي
+  AGENCY_MANAGER // مدير وكالة
+  AGENCY_USER    // مستخدم وكالة
+}
+
+model Agency {
+  id    String @id @default(uuid())
+  name  String
+  users User[]
+  cases Case[]
+}
+
+model User {
+  id       String  @id @default(uuid())
+  username  String   @unique
+  password  String   // Hashed
+  name      String
+  role      String   // ADMIN, VISA_MANAGER, AGENCY_MANAGER, AGENCY_USER, EMPLOYEE
+  agencyId  String? // Nullable for Internal staff
+  agency   Agency? @relation(fields: [agencyId], references: [id])
+}
+
+model Appointment {
+  id       String   @id @default(uuid())
+  code     String   @unique // e.g., DEC20-SPA
+  country  String   // Enum-like: SPAIN, FRANCE
+  date     DateTime
+  capacity      Int
+  capacity_vip  Int      @default(0)
+  status   String   @default("OPEN") // OPEN, FULL, CANCELLED, COMPLETED
+  cases    Case[]
+}
+
+model Case {
+  id                String  @id @default(uuid())
+  fileNumber        String  @unique
+  
+  agencyId          String
+  agency            Agency  @relation(fields: [agencyId], references: [id])
+  
+  appointmentId     String?
+  appointment       Appointment? @relation(fields: [appointmentId], references: [id])
+  
+  travelDate        String
+  returnDate        String
+  
+  lockStatus        String @default("DRAFT") // DRAFT, SUBMITTED
+  appointmentStatus String @default("WAITING") // WAITING, CONFIRMED
+  
+  applicants        Applicant[]
+  
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+model Applicant {
+  id              String  @id @default(uuid())
+  caseId          String
+  case            Case    @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  
+  type            String  @default("MAIN") // MAIN, DEPENDENT
+  
+  // Personal Info
+  nameInPassport  String?
+  passportNumber  String?
+  passportImage   String? // URL
+  mobileNumber    String?
+  birthDate       String?
+  passportIssueDate String?
+  passportExpiryDate String?
+  nationality     String?
+  nationalId      String?
+  placeOfBirthEn  String?
+  gender          String? // MALE, FEMALE
+  maritalStatus   String? // SINGLE, MARRIED
+  
+  // Employment (For Main)
+  isEmployee      Boolean @default(false)
+  employerEn      String?
+  jobTitleEn      String?
+}
+
+model AuditLog {
+  id        String   @id @default(uuid())
+  action    String   // e.g. "WAITLIST_PROMOTED"
+  userId    String   // Who performed the action
+  targetId  String   // e.g. Case ID
+  details   String?  // JSON or text details
+  createdAt DateTime @default(now())
+}
+
+model AmendmentRequest {
+  id        String   @id @default(uuid())
+  caseId    String
+  case      Case     @relation(fields: [caseId], references: [id])
+  type      String   // EDIT, CANCEL, RESCHEDULE
+  status    String   @default("PENDING") // PENDING, APPROVED, REJECTED
+  
+  details   String   // User provided reason/details
+  
+  requestedBy String // User ID
+  reviewedBy  String? // User ID
+  rejectionReason String?
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model WebhookLog {
+  id        String   @id @default(uuid())
+  event     String   // e.g. "WAITLIST_PROMOTED"
+  payload   String   // JSON payload
+  status    String   // PENDING, SENT, FAILED
+  createdAt DateTime @default(now())
+}
