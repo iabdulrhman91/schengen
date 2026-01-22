@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { LayoutDashboard, Calendar, FileText, PlusCircle, Users, Briefcase } from 'lucide-react';
-import { User, Role } from '@/lib/data';
+import { User, Role } from '@/lib/storage/types';
 import clsx from 'clsx';
 
 export default function Sidebar({ user }: { user: User }) {
