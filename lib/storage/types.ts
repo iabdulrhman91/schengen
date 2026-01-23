@@ -283,17 +283,19 @@ export const MASTER_AGENCY_ID = 'tejwal';
 
 export interface IStorage {
     // Agencies
-    getAgencies(): Promise<Agency[]>;
+    getAgencies(includeDeleted?: boolean): Promise<Agency[]>;
     getAgency(id: string): Promise<Agency | null>;
     createAgency(data: Omit<Agency, 'id'>): Promise<Agency>;
     updateAgency(id: string, data: Partial<Agency>): Promise<Agency>;
+    deleteAgency(id: string): Promise<void>;
 
     // Users
     getUserByUsername(username: string): Promise<User | null>;
     getUserById(id: string): Promise<User | null>;
-    getUsers(): Promise<User[]>;
-    createUser(data: Omit<User, 'id' | 'createdAt'>): Promise<User>;
+    getUsers(includeDeleted?: boolean): Promise<User[]>;
+    createUser(data: Omit<User, 'id'>): Promise<User>;
     updateUser(id: string, data: Partial<User>): Promise<User>;
+    deleteUser(id: string): Promise<void>;
 
     // Appointments
     getAppointments(): Promise<Appointment[]>;
