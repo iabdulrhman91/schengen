@@ -21,17 +21,17 @@ const INITIAL_DB: {
     tableViews?: TableView[];
 } = {
     agencies: [
-        { id: 'tejwal', name: 'تجوال (الوكالة الأم)' },
-        { id: 'agency-a', name: 'وكالة النور (A)' },
-        { id: 'agency-b', name: 'وكالة المسافر (B)' },
+        { id: 'tejwal', name: 'تجوال (الوكالة الأم)', type: 'OWNER', isActive: true, credit: 0, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() },
+        { id: 'agency-a', name: 'وكالة النور (A)', type: 'PARTNER', isActive: true, credit: 5000, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() },
+        { id: 'agency-b', name: 'وكالة المسافر (B)', type: 'PARTNER', isActive: true, credit: 0, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() },
     ],
     users: [
         // Password for all: 123
-        { id: 'u1', username: 'admin', password: '$2a$10$8iYvO0L5.X6f8oFz8P6PZeM6qFfN0E5K8uUo/G0YhI5n0yA3x6K6u', name: 'مدير النظام', role: 'ADMIN' },
-        { id: 'u2', username: 'manager', password: '$2a$10$8iYvO0L5.X6f8oFz8P6PZeM6qFfN0E5K8uUo/G0YhI5n0yA3x6K6u', name: 'مدير تأشيرات', role: 'VISA_MANAGER' },
-        { id: 'u3', username: 'employee', password: '$2a$10$8iYvO0L5.X6f8oFz8P6PZeM6qFfN0E5K8uUo/G0YhI5n0yA3x6K6u', name: 'موظف عمليات', role: 'EMPLOYEE' },
-        { id: 'u4', username: 'agentA', password: '$2a$10$8iYvO0L5.X6f8oFz8P6PZeM6qFfN0E5K8uUo/G0YhI5n0yA3x6K6u', name: 'وكالة النور', role: 'AGENCY_MANAGER', agencyId: 'agency-a' },
-        { id: 'u5', username: 'agentB', password: '$2a$10$8iYvO0L5.X6f8oFz8P6PZeM6qFfN0E5K8uUo/G0YhI5n0yA3x6K6u', name: 'وكالة المسافر', role: 'AGENCY_MANAGER', agencyId: 'agency-b' },
+        { id: 'u1', username: 'admin', password: '$2a$10$8iYvO0L5.X6f8oFz8P6PZeM6qFfN0E5K8uUo/G0YhI5n0yA3x6K6u', name: 'مدير النظام', role: 'ADMIN', isActive: true },
+        { id: 'u2', username: 'manager', password: '$2a$10$8iYvO0L5.X6f8oFz8P6PZeM6qFfN0E5K8uUo/G0YhI5n0yA3x6K6u', name: 'مدير تأشيرات', role: 'VISA_MANAGER', isActive: true },
+        { id: 'u3', username: 'employee', password: '$2a$10$8iYvO0L5.X6f8oFz8P6PZeM6qFfN0E5K8uUo/G0YhI5n0yA3x6K6u', name: 'موظف عمليات', role: 'EMPLOYEE', isActive: true },
+        { id: 'u4', username: 'agentA', password: '$2a$10$8iYvO0L5.X6f8oFz8P6PZeM6qFfN0E5K8uUo/G0YhI5n0yA3x6K6u', name: 'وكالة النور', role: 'AGENCY_MANAGER', agencyId: 'agency-a', isActive: true },
+        { id: 'u5', username: 'agentB', password: '$2a$10$8iYvO0L5.X6f8oFz8P6PZeM6qFfN0E5K8uUo/G0YhI5n0yA3x6K6u', name: 'وكالة المسافر', role: 'AGENCY_MANAGER', agencyId: 'agency-b', isActive: true },
     ],
     appointments: [
         { id: 'appt-1', code: 'APPT-SMALL', countryId: 'c1', locationId: 'l1', date: '2024-12-20', capacity: 1, status: 'OPEN' },
@@ -105,40 +105,133 @@ export class JsonStorage implements IStorage {
     }
 
     // Agencies
-    async getAgencies(): Promise<Agency[]> {
-        return this.readDb().agencies || [];
+    async getAgencies(includeDeleted = false): Promise<Agency[]> {
+        const ags = this.readDb().agencies || [];
+        // Migration support & Type Safety
+        return ags
+            .map(a => ({
+                ...a,
+                isActive: (a as any).status === 'ARCHIVED' ? false : (a.isActive ?? true), // Migrate old 'status'
+                type: (a as any).type || (a.id === 'tejwal' ? 'OWNER' : 'PARTNER'), // Default type if missing
+                credit: a.credit || 0,
+                createdAt: a.createdAt || new Date().toISOString(),
+                updatedAt: a.updatedAt || new Date().toISOString()
+            }))
+            .filter(a => includeDeleted ? true : !a.isDeleted);
     }
 
     async getAgency(id: string): Promise<Agency | null> {
-        return this.readDb().agencies.find(a => a.id === id) || null;
+        const all = await this.getAgencies(true); // Get even deleted to verify
+        const agency = all.find(a => a.id === id);
+        if (!agency || agency.isDeleted) return null; // Or return deleted if needed, but standard 'get' usually implies active record
+        return agency;
     }
 
     async createAgency(data: Omit<Agency, 'id'>): Promise<Agency> {
         const db = this.readDb();
         const id = `agency-${Math.random().toString(36).substring(7)}`;
-        const newAgency = { id, ...data };
+        const now = new Date().toISOString();
+
+        const newAgency: Agency = {
+            id,
+            ...data,
+            isActive: data.isActive ?? true,
+            type: data.type || 'PARTNER',
+            credit: data.credit || 0,
+            createdAt: now,
+            updatedAt: now
+        };
+
+        if (!db.agencies) db.agencies = [];
         db.agencies.push(newAgency);
         this.writeDb(db);
         return newAgency;
     }
 
+    async updateAgency(id: string, data: Partial<Agency>): Promise<Agency> {
+        const db = this.readDb();
+        const idx = db.agencies.findIndex(a => a.id === id);
+        if (idx === -1) throw new Error("Agency not found");
+
+        const updated = { ...db.agencies[idx], ...data, updatedAt: new Date().toISOString() };
+        db.agencies[idx] = updated;
+        this.writeDb(db);
+        return updated;
+    }
+
+    async deleteAgency(id: string): Promise<void> {
+        const db = this.readDb();
+        const idx = db.agencies.findIndex(a => a.id === id);
+        if (idx !== -1) {
+            db.agencies[idx].isDeleted = true;
+            db.agencies[idx].isActive = false; // Disable as well
+            db.agencies[idx].updatedAt = new Date().toISOString();
+            this.writeDb(db);
+        }
+    }
+
     // Users
     async getUserByUsername(username: string): Promise<User | null> {
-        return this.readDb().users.find(u => u.username === username) || null;
+        const user = this.readDb().users.find(u => u.username === username) || null;
+        if (user) return this.migrateUserIfNeeded(user);
+        return null;
     }
 
     async getUserById(id: string): Promise<User | null> {
-        return this.readDb().users.find(u => u.id === id) || null;
+        const user = this.readDb().users.find(u => u.id === id) || null;
+        if (user) return this.migrateUserIfNeeded(user);
+        return null;
     }
 
-    async getUsers(): Promise<User[]> {
-        return this.readDb().users || [];
+    async getUsers(includeDeleted = false): Promise<User[]> {
+        const users = this.readDb().users || [];
+        // Migration: Default keys & Role fix
+        return users
+            .map(u => this.migrateUserIfNeeded({
+                ...u,
+                isActive: u.isActive ?? true,
+                createdAt: u.createdAt || new Date().toISOString()
+            }))
+            .filter(u => includeDeleted ? true : !u.isDeleted);
+    }
+
+    // Internal helper for self-healing
+    private migrateUserIfNeeded(user: User): User {
+        // Self-Healing: Upgrade legacy 'admin' to 'MASTER_ADMIN'
+        if ((user.username === 'admin' || user.username === 'iabdulrhman91') && user.role === 'ADMIN') {
+            console.log(`[Self-Healing] Upgrading user ${user.username} to MASTER_ADMIN`);
+
+            // Update in memory
+            const updatedUser = { ...user, role: 'MASTER_ADMIN' as const };
+
+            // Persist to DB silently
+            // Note: We read-modify-write to be safe, though this might be slightly expensive on every read if not cached.
+            // Since it's a one-time thing per corrupt state, it's fine.
+            try {
+                const db = this.readDb();
+                const idx = db.users.findIndex(u => u.id === user.id);
+                if (idx !== -1 && db.users[idx].role !== 'MASTER_ADMIN') {
+                    db.users[idx].role = 'MASTER_ADMIN';
+                    this.writeDb(db);
+                }
+            } catch (e) {
+                console.error("[Self-Healing] Failed to persist admin upgrade", e);
+            }
+
+            return updatedUser;
+        }
+        return user;
     }
 
     async createUser(data: Omit<User, 'id'>): Promise<User> {
         const db = this.readDb();
         const id = `u-${Math.random().toString(36).substring(7)}`;
-        const newUser = { id, ...data };
+        const newUser: User = {
+            id,
+            ...data,
+            isActive: data.isActive ?? true,
+            createdAt: new Date().toISOString()
+        };
         db.users.push(newUser);
         this.writeDb(db);
         return newUser;
@@ -151,6 +244,16 @@ export class JsonStorage implements IStorage {
         db.users[idx] = { ...db.users[idx], ...data };
         this.writeDb(db);
         return db.users[idx];
+    }
+
+    async deleteUser(id: string): Promise<void> {
+        const db = this.readDb();
+        const idx = db.users.findIndex(u => u.id === id);
+        if (idx !== -1) {
+            db.users[idx].isDeleted = true;
+            db.users[idx].isActive = false;
+            this.writeDb(db);
+        }
     }
 
     // Appointments

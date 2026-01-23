@@ -1,4 +1,36 @@
-export type Role = 'ADMIN' | 'VISA_MANAGER' | 'EMPLOYEE' | 'AGENCY_MANAGER' | 'AGENCY_USER';
+export type Role = 'MASTER_ADMIN' | 'ADMIN' | 'VISA_MANAGER' | 'EMPLOYEE' | 'AGENCY_MANAGER' | 'AGENCY_USER';
+
+export type Permission =
+    // User & Agency Management
+    | 'MANAGE_ALL_USERS'
+    | 'MANAGE_AGENCIES'
+    | 'VIEW_ALL_AGENCIES'
+    | 'MANAGE_AGENCY_CREDIT'
+
+    // Operational Core
+    | 'MANAGE_MASTER_APPOINTMENTS'    // Create/Edit Appointments
+    | 'VIEW_ALL_CASES'                // See cases from all agencies
+    | 'MANAGE_ALL_CASES'              // Edit cases from all agencies
+    | 'DELETE_CASES'
+
+    // Financial & Pricing
+    | 'MANAGE_PRICING_BOOKS'
+    | 'MANAGE_PRICE_OVERRIDES'
+    | 'VIEW_FINANCIAL_REPORTS'
+
+    // System
+    | 'MANAGE_SYSTEM_SETTINGS'
+    | 'VIEW_AUDIT_LOGS'
+    | 'MANAGE_ROLES';
+
+export interface SystemSettings {
+    id: string; // usually 'default'
+    maintenanceMode: boolean;
+    allowAgencyRegistration: boolean;
+    globalAnnouncement?: string;
+    allowedCurrencies: string[];
+    defaultCommissionRate: number;
+}
 
 export interface User {
     id: string;
@@ -7,11 +39,20 @@ export interface User {
     name: string;
     role: Role;
     agencyId?: string;
+    isActive: boolean;
+    isDeleted?: boolean;
+    createdAt?: string;
 }
 
 export interface Agency {
     id: string;
     name: string;
+    type: 'OWNER' | 'PARTNER';
+    isActive: boolean;
+    credit: number;
+    createdAt: string;
+    updatedAt: string;
+    isDeleted?: boolean;
 }
 
 export interface Country {
@@ -245,6 +286,7 @@ export interface IStorage {
     getAgencies(): Promise<Agency[]>;
     getAgency(id: string): Promise<Agency | null>;
     createAgency(data: Omit<Agency, 'id'>): Promise<Agency>;
+    updateAgency(id: string, data: Partial<Agency>): Promise<Agency>;
 
     // Users
     getUserByUsername(username: string): Promise<User | null>;

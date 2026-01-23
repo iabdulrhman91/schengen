@@ -970,7 +970,7 @@ export function OperationalSheet({
             </header>
 
             {/* --- MAIN CONTENT AREA --- */}
-            <main className="flex-1 flex flex-col overflow-auto scrollbar-hide border-t border-gray-100">
+            <main className="flex-1 flex flex-col overflow-auto border-t border-gray-100 w-full relative">
                 <div className="inline-block align-middle min-w-full">
                     {!mounted ? (
                         <table className="min-w-full border-separate border-spacing-0 table-fixed">

@@ -11,6 +11,15 @@
         {
             "id": "agency-b",
             "name": "وكالة الأمل (B)"
+        },
+        {
+            "id": "agency-43vlvu",
+            "name": "سفير المحيط",
+            "type": "PARTNER",
+            "isActive": true,
+            "credit": 0,
+            "createdAt": "2026-01-23T21:30:56.816Z",
+            "updatedAt": "2026-01-23T21:30:56.816Z"
         }
     ],
     "countries": [
@@ -107,7 +116,7 @@
             "username": "admin",
             "password": "$2b$10$HJyLMyGCsOzafxfMcOyCYuxoond3k3aTsKNcVShZAqAbZMRsKqI.K",
             "name": "مدير النظام",
-            "role": "ADMIN",
+            "role": "MASTER_ADMIN",
             "createdAt": "2026-01-03T10:30:45.340Z"
         },
         {
@@ -125,7 +134,8 @@
             "name": "مدير وكالة النور",
             "role": "AGENCY_MANAGER",
             "agencyId": "agency-a",
-            "createdAt": "2026-01-03T10:30:45.340Z"
+            "createdAt": "2026-01-03T10:30:45.340Z",
+            "isActive": true
         },
         {
             "id": "u4",
@@ -153,6 +163,26 @@
             "role": "ADMIN",
             "agencyId": "tejwal",
             "createdAt": "2026-01-03T19:00:00.000Z"
+        },
+        {
+            "id": "u-iolg48r",
+            "username": "manager_f30s",
+            "password": "$2b$10$axF4OBogkQYo7PysArhf/.c6Bwg7g/FNZLFEZkjrudH7D0mOd.xwW",
+            "name": "مدير سفير المحيط",
+            "role": "AGENCY_MANAGER",
+            "agencyId": "agency-43vlvu",
+            "isActive": true,
+            "createdAt": "2026-01-23T21:30:56.817Z"
+        },
+        {
+            "id": "u-z8o2tj",
+            "username": "saf",
+            "name": "رقبة",
+            "role": "AGENCY_USER",
+            "agencyId": "agency-43vlvu",
+            "password": "$2b$10$VTA5RE8SFxyYBGEPtZV4TecCrV.IziF4q9G5irON..3UqneD/gOc6",
+            "isActive": true,
+            "createdAt": "2026-01-23T21:32:08.525Z"
         }
     ],
     "appointments": [
@@ -187,7 +217,75 @@
             "id": "8308006"
         }
     ],
-    "cases": [],
+    "cases": [
+        {
+            "id": "case-v9y9bc",
+            "fileNumber": "WIZ-WS7QP",
+            "agencyId": "tejwal",
+            "appointmentId": "0405033",
+            "phone": "542226411",
+            "travelDate": "2026-01-23T09:44:41.045Z",
+            "returnDate": "2026-01-23T09:44:41.045Z",
+            "lockStatus": "SUBMITTED",
+            "statusId": "os-ready",
+            "pricingSnapshot": {
+                "pricingVersion": 1,
+                "countryCode": "AUTO",
+                "centerId": "AUTO",
+                "appointmentId": "0405033",
+                "seatType": "NORMAL",
+                "counts": {
+                    "adult": 1,
+                    "child": 0,
+                    "infant": 0
+                },
+                "unitPrices": {
+                    "normal": {
+                        "adult": 1600,
+                        "child": 1450,
+                        "infant": 1250
+                    },
+                    "vip": {
+                        "adult": 2000,
+                        "child": 2000,
+                        "infant": 2000
+                    }
+                },
+                "appliedFrom": {
+                    "basePriceBookId": "pb-1767699944142"
+                },
+                "totals": {
+                    "subtotal": 1600,
+                    "total": 1600,
+                    "currency": "SAR"
+                },
+                "createdAt": "2026-01-23T09:44:41.045Z"
+            },
+            "applicants": [
+                {
+                    "id": "xhk5sm",
+                    "caseId": "case-v9y9bc",
+                    "type": "MAIN",
+                    "nameInPassport": "BURAYK, YASIR ALI S",
+                    "passportNumber": "ZY68189",
+                    "mobileNumber": "0542226411",
+                    "birthDate": "1988-08-21",
+                    "passportIssueDate": "2022-09-16",
+                    "passportExpiryDate": "2027-07-24",
+                    "nationality": "SAU",
+                    "nationalId": "1074159367",
+                    "gender": "M",
+                    "placeOfBirthEn": "أبها",
+                    "maritalStatus": "MARRIED",
+                    "employerEn": "أرامكو",
+                    "jobTitleEn": "مهندس",
+                    "sponsorship": "كفالة ذاتية"
+                }
+            ],
+            "createdAt": "2026-01-23T09:44:41.045Z",
+            "updatedAt": "2026-01-23T09:44:41.053Z"
+        }
+    ],
     "amendmentRequests": [],
     "webhookLogs": [
         {
@@ -412,6 +510,16 @@
             "createdAt": "2026-01-22T18:07:08.370Z",
             "errorMessage": "fetch failed",
             "processedAt": "2026-01-22T18:07:08.576Z"
+        },
+        {
+            "event": "CASE_SUBMITTED",
+            "status": "FAILED",
+            "payload": "{\"case\":{\"id\":\"case-v9y9bc\",\"fileNumber\":\"WIZ-WS7QP\",\"status\":\"SUBMITTED\",\"stage\":\"os-ready\"},\"agency\":{\"id\":\"tejwal\",\"name\":\"مدير النظام\"},\"appointment\":{\"id\":\"0405033\",\"code\":\"APT-AGSSL\",\"date\":\"2026-01-07\"},\"mainApplicant\":{\"id\":\"xhk5sm\",\"name\":\"BURAYK, YASIR ALI S\"},\"meta\":{\"triggeredBy\":\"admin\",\"timestamp\":\"2026-01-23T09:44:41.056Z\"}}",
+            "id": "5c150dd8-52f5-4da5-973c-6c770288c5a9",
+            "eventId": "3d0b941d-2d5a-467d-a5bf-da82cefb3f5d",
+            "createdAt": "2026-01-23T09:44:41.057Z",
+            "errorMessage": "fetch failed",
+            "processedAt": "2026-01-23T09:44:41.295Z"
         }
     ],
     "priceBooks": [

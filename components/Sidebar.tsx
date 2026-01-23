@@ -2,73 +2,111 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, Calendar, FileText, PlusCircle, Users, Briefcase } from 'lucide-react';
-import { User, Role } from '@/lib/storage/types';
+import { LayoutDashboard, Calendar, FileText, PlusCircle, Users, Briefcase, Settings, ShieldAlert, BarChart3, Database } from 'lucide-react';
+import { User } from '@/lib/storage/types';
 import clsx from 'clsx';
 
 export default function Sidebar({ user }: { user: User }) {
     const pathname = usePathname();
 
-    const isAdmin = user.role === 'ADMIN';
+    const isMaster = user.role === 'MASTER_ADMIN';
+    const isAdmin = user.role === 'ADMIN' || isMaster;
     const isVisa = user.role === 'VISA_MANAGER';
     const isAgency = user.role === 'AGENCY_USER' || user.role === 'AGENCY_MANAGER';
 
-    const links = [
+    const sections = [
         {
-            label: 'لوحة التحكم',
-            href: '/',
-            icon: LayoutDashboard,
-            show: true,
+            title: 'القائمة الرئيسية',
+            items: [
+                {
+                    label: 'لوحة التحكم',
+                    href: '/',
+                    icon: LayoutDashboard,
+                    show: true,
+                },
+                {
+                    label: 'إنشاء طلب جديد',
+                    href: '/requests/new',
+                    icon: PlusCircle,
+                    show: true,
+                },
+                {
+                    label: 'طلبات الشنغن', // Operational Listing
+                    href: '/requests',
+                    icon: FileText,
+                    show: true,
+                },
+            ]
         },
         {
-            label: 'إدارة المواعيد',
-            href: '/appointments',
-            icon: Calendar,
+            title: 'إدارة العمليات',
             show: isAdmin || isVisa,
+            items: [
+                {
+                    label: 'جدولة المواعيد',
+                    href: '/appointments',
+                    icon: Calendar,
+                    show: isAdmin || isVisa,
+                },
+                {
+                    label: 'إدارة الأسعار',
+                    href: '/admin/pricing',
+                    icon: BarChart3,
+                    show: isAdmin,
+                },
+            ]
         },
         {
-            label: 'قائمة المواعيد',
-            href: '/appointments',
-            icon: Calendar,
-            show: isAgency, // Read only view for agency if they want to see availability outside wizard
-        },
-        {
-            label: 'طلبات الشنغن',
-            href: '/requests',
-            icon: FileText,
-            show: true,
-        },
-        {
-            label: 'إنشاء طلب جديد',
-            href: '/requests/new',
-            icon: PlusCircle,
-            show: true,
-        },
-        {
-            label: 'إدارة الوكالات',
-            href: '/admin/agencies',
-            icon: Briefcase,
+            title: 'الإدارة والتنظيم',
             show: isAdmin,
+            items: [
+                {
+                    label: 'الوكالات والشركاء',
+                    href: '/admin/agencies',
+                    icon: Briefcase,
+                    show: isAdmin,
+                },
+                {
+                    label: 'المستخدمين والصلاحيات',
+                    href: '/admin/users',
+                    icon: Users,
+                    show: isAdmin,
+                },
+            ]
         },
         {
-            label: 'إدارة المستخدمين',
-            href: '/admin/users',
-            icon: Users,
-            show: isAdmin,
-        },
-        {
-            label: 'سجل التنبيهات',
-            href: '/admin/webhooks',
-            icon: FileText,
-            show: isAdmin || isVisa,
-        },
-        {
-            label: 'إدارة الأسعار',
-            href: '/admin/pricing',
-            icon: Briefcase, // using Briefcase as placeholder or maybe a different one like BadgeDollarSign if available, but Briefcase is safe
-            show: isAdmin,
-        },
+            title: 'النظام',
+            show: isMaster,
+            items: [
+                {
+                    label: 'إعدادات النظام',
+                    href: '/admin/settings',
+                    icon: Settings,
+                    show: isMaster,
+                },
+                {
+                    label: 'سجل العمليات',
+                    href: '/admin/audit',
+                    icon: Database,
+                    show: isMaster,
+                },
+                {
+                    label: 'سجل Webhooks',
+                    href: '/admin/webhooks',
+                    icon: ShieldAlert,
+                    show: isMaster || isVisa,
+                },
+            ]
+        }
     ];
+
+    const getRoleLabel = () => {
+        if (isMaster) return 'مدير النظام (المالك)';
+        if (isAdmin) return 'مدير إداري';
+        if (isVisa) return 'مدير التأشيرات';
+        if (user.role === 'AGENCY_MANAGER') return 'مدير وكالة';
+        return 'موظف وكالة';
+    };
 
     return (
         <aside className="w-64 shrink-0 bg-white border-l border-gray-200 hidden md:flex flex-col h-screen sticky top-0">
@@ -76,26 +114,38 @@ export default function Sidebar({ user }: { user: User }) {
                 <h1 className="text-xl font-bold text-blue-800 tracking-tight">تجوال شنغن</h1>
             </div>
 
-            <div className="p-4 space-y-1 flex-1 overflow-y-auto scrollbar-hide">
-                <div className="px-2 py-2 text-xs font-black text-gray-400 uppercase tracking-wider">القائمة الرئيسية</div>
-                {links.map((link) => {
-                    if (!link.show) return null;
-                    const isActive = pathname === link.href;
-                    const Icon = link.icon;
+            <div className="p-4 space-y-6 flex-1 overflow-y-auto scrollbar-hide">
+                {sections.map((section, idx) => {
+                    if (section.show === false) return null;
+
+                    const visibleItems = section.items.filter(i => i.show);
+                    if (visibleItems.length === 0) return null;
+
                     return (
-                        <Link
-                            key={link.href}
-                            href={link.href}
-                            className={clsx(
-                                'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 group whitespace-nowrap',
-                                isActive
-                                    ? 'bg-blue-50 text-blue-700 shadow-sm'
-                                    : 'text-gray-500 hover:bg-gray-50 hover:text-gray-900'
-                            )}
-                        >
-                            <Icon size={18} className={clsx("transition-transform group-hover:scale-110", isActive && "text-blue-600")} strokeWidth={isActive ? 2 : 1.5} />
-                            <span>{link.label}</span>
-                        </Link>
+                        <div key={idx} className="space-y-1">
+                            <h3 className="px-2 text-xs font-black text-gray-400 uppercase tracking-wider mb-2">
+                                {section.title}
+                            </h3>
+                            {visibleItems.map((link) => {
+                                const isActive = pathname === link.href;
+                                const Icon = link.icon;
+                                return (
+                                    <Link
+                                        key={link.href}
+                                        href={link.href}
+                                        className={clsx(
+                                            'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 group whitespace-nowrap',
+                                            isActive
+                                                ? 'bg-blue-50 text-blue-700 shadow-sm'
+                                                : 'text-gray-500 hover:bg-gray-50 hover:text-gray-900'
+                                        )}
+                                    >
+                                        <Icon size={18} className={clsx("transition-transform group-hover:scale-110", isActive && "text-blue-600")} strokeWidth={isActive ? 2 : 1.5} />
+                                        <span>{link.label}</span>
+                                    </Link>
+                                );
+                            })}
+                        </div>
                     );
                 })}
             </div>
@@ -108,7 +158,7 @@ export default function Sidebar({ user }: { user: User }) {
                     <div className="overflow-hidden">
                         <p className="text-sm font-black text-gray-900 truncate leading-tight">{user.name}</p>
                         <p className="text-[10px] text-blue-600 font-bold truncate uppercase tracking-tight mt-0.5">
-                            {isAdmin ? 'مدير عام النظام' : 'عضو الوكالة'}
+                            {getRoleLabel()}
                         </p>
                     </div>
                 </div>

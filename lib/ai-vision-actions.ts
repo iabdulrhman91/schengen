@@ -18,43 +18,45 @@ export interface ParsedPassportData {
 }
 
 export async function extractPassportAction(base64Image: string) {
+    const startTime = Date.now();
+
+    // 1. Log Start & Image Size
+    const sizeInBytes = Buffer.byteLength(base64Image, 'utf8');
+    const sizeInKB = (sizeInBytes / 1024).toFixed(2);
+    console.log(`[AI Vision] Starting extraction. Image size: ${sizeInKB} KB`);
+
     if (!process.env.GOOGLE_AI_API_KEY) {
-        console.warn("GOOGLE_AI_API_KEY is missing.");
+        console.error("[AI Vision] Critical Error: GOOGLE_AI_API_KEY is missing in environment variables.");
         return null;
     }
 
     try {
-        const modelName = process.env.GOOGLE_AI_MODEL || "gemini-1.5-flash";
-        const model = genAI.getGenerativeModel({ model: modelName });
+        // List of models to try in order of preference
+        const modelsToTry = [
+            process.env.GOOGLE_AI_MODEL, // 1. Primary from environment
+            "gemini-1.5-flash",          // 2. Standard Flash (Stable)
+            "gemini-2.0-flash",          // 3. New Flash (if available)
+            "gemini-pro-vision"          // 4. Legacy Pro Vision (Backup)
+        ].filter(Boolean) as string[];
 
         // Extract mime type and base64 data
         const mimeMatch = base64Image.match(/^data:([^;]+);base64,/);
         const mimeType = mimeMatch ? mimeMatch[1] : "image/jpeg";
         const base64Data = base64Image.replace(/^data:[^;]+;base64,/, "");
 
-        const prompt = `
-            Extract passport data from this image.
-            Return ONLY a JSON object:
-            {
-                "passportNumber": "string",
-                "fullNameLatin": "string",
-                "nationality": "ISO 3-letter",
-                "sex": "M/F",
-                "dateOfBirth": "YYYY-MM-DD",
-                "dateOfIssue": "YYYY-MM-DD",
-                "dateOfExpiry": "YYYY-MM-DD",
-                "placeOfBirth": "string",
-                "confidence": {"field": 0-1},
-                "rawText": "string"
-            }
-        `;
+        // Remove duplicates
+        const uniqueModels = [...new Set(modelsToTry)];
 
-        let attempt = 0;
-        const maxRetries = 2;
         let result;
+        let lastError;
+        let successModel = "";
 
-        while (attempt <= maxRetries) {
+        // Try each model until one works
+        for (const modelName of uniqueModels) {
             try {
+                console.log(`[AI Vision] Trying model: ${modelName}...`);
+                const model = genAI.getGenerativeModel({ model: modelName });
+
                 result = await model.generateContent([
                     {
                         inlineData: {
@@ -64,43 +66,66 @@ export async function extractPassportAction(base64Image: string) {
                     },
                     { text: prompt },
                 ]);
-                break; // Success!
-            } catch (error: any) {
-                const isRetryable = error.message?.includes("503") || error.message?.includes("429");
 
-                if (isRetryable && attempt < maxRetries) {
-                    const waitTime = error.message?.includes("429") ? 5000 * (attempt + 1) : 2000 * (attempt + 1);
-                    console.warn(`Gemini API error (${error.message?.includes("429") ? '429' : '503'}), retrying in ${waitTime}ms... attempt ${attempt + 1}`);
-                    attempt++;
-                    await new Promise(resolve => setTimeout(resolve, waitTime));
+                successModel = modelName;
+                console.log(`[AI Vision] Success with model: ${modelName}`);
+                break; // If successful, exit the loop
+            } catch (error: any) {
+                const duration = Date.now() - startTime;
+                console.warn(`[AI Vision] Failed with model ${modelName} after ${duration}ms: ${error.message}`);
+                lastError = error;
+
+                // If it's a 404 (Not Found), try the next model immediately
+                if (error.message?.includes("404") || error.message?.includes("not found")) {
                     continue;
                 }
-                throw error;
+
+                // For other errors (like 429), we could retry the same model, but for simplicity/robustness we move to next
+                continue;
             }
         }
 
-        if (!result) throw new Error("Failed to get response from AI");
+        if (!result) {
+            console.error(`[AI Vision] All models failed. Last error: ${lastError?.message}`);
+            throw lastError || new Error("Failed to get response from any AI model");
+        }
+
+        if (!result) throw new Error("Failed to get response from AI (No result object)");
 
         const response = await result.response;
         let text = response.text().trim();
 
+        console.log(`[AI Vision] Success! Raw response length: ${text.length}`);
+
         const jsonMatch = text.match(/\{[\s\S]*\}/);
         if (jsonMatch) {
-            return JSON.parse(jsonMatch[0]);
+            const parsed = JSON.parse(jsonMatch[0]);
+            console.log(`[AI Vision] JSON Parsing Successful. Execution time: ${Date.now() - startTime}ms`);
+            return parsed;
         }
 
         throw new Error("Invalid JSON in AI response");
     } catch (error: any) {
-        console.error("AI Vision Detailed Error:", error);
+        const duration = Date.now() - startTime;
+        console.error("========================================");
+        console.error("[AI Vision] FINAL ERROR LOG");
+        console.error(`Duration: ${duration}ms`);
+        console.error(`Image Size: ${sizeInKB} KB`);
+        console.error("Error Message:", error.message);
+        console.error("Stack Trace:", error.stack);
+        console.error("========================================");
+
         if (error.message?.includes("429")) {
             throw new Error("عذراً، تم تجاوز الحد المسموح به لطلبات الذكاء الأصطناعي اليوم. يرجى الانتظار قليلاً أو إدخال البيانات يدوياً.");
         }
         if (error.message?.includes("404")) {
-            throw new Error("عذراً، نوع الحساب الخاص بالذكاء الاصطناعي لا يدعم هذا النموذج حالياً.");
+            throw new Error(`عذراً، الموديل ${process.env.GOOGLE_AI_MODEL} غير متوفر أو غير مدعوم في مفتاح API هذا.`);
         }
         if (error.message?.includes("503")) {
             throw new Error("خادم الذكاء الاصطناعي مشغول حالياً، يرجى المحاولة مرة أخرى.");
         }
-        throw new Error("حدث خطأ أثناء معالجة الصورة، يرجى المحاولة مرة أخرى أو الإدخال يدوياً.");
+
+        // Return generic error to client, but server logs have full details
+        throw new Error(`حدث خطأ أثناء معالجة الصورة (${error.message}). يرجى المراجعة يدوياً.`);
     }
 }
