@@ -44,7 +44,8 @@ export async function createAgencyAction(formData: FormData) {
         password: '$2a$10$8iYvO0L5.X6f8oFz8P6PZeM6qFfN0E5K8uUo/G0YhI5n0yA3x6K6u',
         name: `مدير ${name}`,
         role: 'AGENCY_MANAGER',
-        agencyId: newAgency.id
+        agencyId: newAgency.id,
+        isActive: true
     });
 
     revalidatePath('/admin/agencies');
