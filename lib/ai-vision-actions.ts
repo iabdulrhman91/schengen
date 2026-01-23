@@ -57,6 +57,18 @@ export async function extractPassportAction(base64Image: string) {
                 console.log(`[AI Vision] Trying model: ${modelName}...`);
                 const model = genAI.getGenerativeModel({ model: modelName });
 
+                const prompt = `Extract passport information from this image and return ONLY a JSON object with these exact fields:
+{
+  "fullName": "full name as shown",
+  "passportNumber": "passport number",
+  "birthDate": "YYYY-MM-DD",
+  "expiryDate": "YYYY-MM-DD",
+  "issueDate": "YYYY-MM-DD (if visible)",
+  "sex": "M or F",
+  "nationality": "nationality",
+  "placeOfBirth": "place of birth (if visible)"
+}`;
+
                 result = await model.generateContent([
                     {
                         inlineData: {
