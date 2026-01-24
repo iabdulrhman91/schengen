@@ -6,7 +6,9 @@
         },
         {
             "id": "agency-a",
-            "name": "وكالة النور (A)"
+            "name": "وكالة النور (A)",
+            "credit": 1,
+            "updatedAt": "2026-01-24T09:43:40.726Z"
         },
         {
             "id": "agency-b",

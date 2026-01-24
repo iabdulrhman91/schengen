@@ -10,7 +10,7 @@ export default function Header({ user, agency }: { user: User, agency: Agency | 
         <header className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-6">
             <div className="flex items-center gap-4">
                 <h2 className="text-lg font-semibold text-gray-900 tracking-tight">
-                    مرحباً، <span className="text-blue-600 font-bold">{user.name}</span>
+                    <span className="text-blue-600 font-bold">{user.name}</span>
                 </h2>
                 <div className="flex items-center gap-2">
                     {isMaster ? (
