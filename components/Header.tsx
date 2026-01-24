@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/core';
 import { ShieldAlert } from 'lucide-react';
 
 export default function Header({ user, agency }: { user: User, agency: Agency | null }) {
-    const isMaster = user.agencyId === MASTER_AGENCY_ID;
+    const isMaster = user.role === 'MASTER_ADMIN';
 
     return (
         <header className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-6">
@@ -18,11 +18,11 @@ export default function Header({ user, agency }: { user: User, agency: Agency | 
                             <ShieldAlert size={12} className="opacity-80" />
                             إدارة النظام
                         </span>
-                    ) : (
+                    ) : agency ? (
                         <span className="bg-gray-50 text-gray-600 px-3 py-1 rounded-full text-[11px] font-bold border border-gray-100 italic">
-                            {agency?.name || 'وكالة خارجية'}
+                            {agency.name}
                         </span>
-                    )}
+                    ) : null}
                 </div>
             </div>
             <form action={logoutAction}>
