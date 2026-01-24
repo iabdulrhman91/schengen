@@ -160,19 +160,19 @@ export async function getOperationalStatusesAction() {
 
 export async function createOperationalStatusAction(data: any) {
     const session = await getSession();
-    if (session?.role !== 'ADMIN') throw new Error("Unauthorized");
+    if (session?.role !== 'ADMIN' && session?.role !== 'MASTER_ADMIN') throw new Error("Unauthorized");
     return await storage.createOperationalStatus(data);
 }
 
 export async function updateOperationalStatusAction(id: string, data: any) {
     const session = await getSession();
-    if (session?.role !== 'ADMIN') throw new Error("Unauthorized");
+    if (session?.role !== 'ADMIN' && session?.role !== 'MASTER_ADMIN') throw new Error("Unauthorized");
     return await storage.updateOperationalStatus(id, data);
 }
 
 export async function deleteOperationalStatusAction(id: string, migrateToId?: string) {
     const session = await getSession();
-    if (session?.role !== 'ADMIN') throw new Error("Unauthorized");
+    if (session?.role !== 'ADMIN' && session?.role !== 'MASTER_ADMIN') throw new Error("Unauthorized");
     return await storage.deleteOperationalStatus(id, migrateToId);
 }
 
@@ -454,7 +454,7 @@ export async function submitCaseAction(caseId: string) {
 
 export async function createAppointmentAction(formData: FormData) {
     const session = await getSession();
-    if (session?.role !== 'ADMIN' && session?.role !== 'VISA_MANAGER') {
+    if (session?.role !== 'ADMIN' && session?.role !== 'VISA_MANAGER' && session?.role !== 'MASTER_ADMIN') {
         throw new Error("Unauthorized");
     }
 
@@ -801,7 +801,7 @@ export async function resendWebhookAction(logId: string) {
 // Phase 26: Appointment Management
 export async function updateAppointmentAction(id: string, formData: FormData) {
     const session = await getSession();
-    if (session?.role !== 'ADMIN' && session?.role !== 'VISA_MANAGER') throw new Error("Unauthorized");
+    if (session?.role !== 'ADMIN' && session?.role !== 'VISA_MANAGER' && session?.role !== 'MASTER_ADMIN') throw new Error("Unauthorized");
 
     const data: any = {};
     if (formData.has('status')) data.status = formData.get('status');
@@ -826,7 +826,7 @@ export const updateAppointmentStatusAction = updateAppointmentAction;
 
 export async function deleteAppointmentAction(id: string) {
     const session = await getSession();
-    if (session?.role !== 'ADMIN' && session?.role !== 'VISA_MANAGER') throw new Error("Unauthorized");
+    if (session?.role !== 'ADMIN' && session?.role !== 'VISA_MANAGER' && session?.role !== 'MASTER_ADMIN') throw new Error("Unauthorized");
 
     await storage.deleteAppointment(id);
     revalidatePath('/appointments');
@@ -1187,8 +1187,17 @@ export async function submitWizardFinalAction(payload: {
     const { MASTER_AGENCY_ID } = await import('./storage/types');
     const agencyId = session.agencyId || MASTER_AGENCY_ID;
 
-    // 1. Resolve Pricing Snapshot
+    // 1. Resolve Pricing Snapshot and Appointment Info
     const pricing = await storage.resolveUnitPrices(payload.appointmentId);
+    const appointment = await storage.getAppointment(payload.appointmentId);
+    if (!appointment) throw new Error("Appointment not found");
+
+    // Use appointment date for travel, and +8 days for return
+    const travelDate = appointment.date; // Usually "YYYY-MM-DD"
+    const tDateObj = new Date(travelDate);
+    const rDateObj = new Date(tDateObj);
+    rDateObj.setDate(tDateObj.getDate() + 8);
+    const returnDate = rDateObj.toISOString().split('T')[0];
 
     // 2. Map and Count Types
     let adult = 0, child = 0, infant = 0;
@@ -1230,8 +1239,8 @@ export async function submitWizardFinalAction(payload: {
         agencyId: agencyId,
         appointmentId: payload.appointmentId,
         phone: payload.phone,
-        travelDate: new Date().toISOString(), // Final date should come from appt date eventually
-        returnDate: new Date().toISOString(),
+        travelDate: travelDate,
+        returnDate: returnDate,
         lockStatus: 'DRAFT',
         statusId: 'os-new',
         pricingSnapshot: snapshot as any
@@ -1304,8 +1313,7 @@ export async function submitWizardFinalAction(payload: {
 
     // Save with applicants
     await storage.updateCase(newCase.id, {
-        applicants,
-        travelDate: snapshot.createdAt // Initial travel date or something meaningful
+        applicants
     });
 
     // 5. Submit Case (Lock and Check Capacity)

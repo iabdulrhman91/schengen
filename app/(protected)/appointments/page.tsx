@@ -35,7 +35,7 @@ export default async function AppointmentsPage() {
 
     // Sort by date desc
     const sortedAppointments = [...appointments].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-    const canEdit = session?.role === 'ADMIN' || session?.role === 'VISA_MANAGER';
+    const canEdit = session?.role === 'ADMIN' || session?.role === 'VISA_MANAGER' || session?.role === 'MASTER_ADMIN';
 
     return (
         <div className="space-y-6">

@@ -1,11 +1,11 @@
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
-import { format } from "date-fns";
+import { format, addDays } from "date-fns";
 import { arSA } from "date-fns/locale";
 import { AppointmentSummary } from "./BookingCalendar";
 import { Button } from "@/components/ui/core";
-import { MapPin, CheckCircle2, Loader2, Minus, Plus, Edit2, Trash2, Check, Lock, Calendar, Plane, ChevronDown, ChevronUp, ArrowLeft } from "lucide-react";
+import { MapPin, CheckCircle2, Loader2, Minus, Plus, Edit2, Trash2, Check, Lock, Calendar, Plane, ChevronDown, ChevronUp, ArrowLeft, AlertCircle } from "lucide-react";
 import { getAppointmentPricing } from "@/lib/actions";
 import { ParsedPricing } from "@/lib/storage/types";
 import { DayPicker } from "react-day-picker";
@@ -438,6 +438,12 @@ export function DaySlots({ date, appointments, selectedAppointmentId, selectedSe
 
                                                         {/* TRAVEL DATE SELECTION - Full Width Bar */}
                                                         <div className="space-y-2">
+                                                            {/* Rule Notification */}
+                                                            <div className="flex items-center gap-2 text-[10px] font-bold text-amber-600 bg-amber-50 px-3 py-1.5 rounded-lg border border-amber-100">
+                                                                <AlertCircle className="w-3 h-3" />
+                                                                <span>يجب أن يكون تاريخ السفر بعد 10 أيام على الأقل من تاريخ الموعد</span>
+                                                            </div>
+
                                                             {/* Trigger Bar - Full Width like Total */}
                                                             <button
                                                                 type="button"
@@ -476,7 +482,9 @@ export function DaySlots({ date, appointments, selectedAppointmentId, selectedSe
                                                                             }}
                                                                             locale={arSA}
                                                                             dir="rtl"
-                                                                            disabled={{ before: new Date() }}
+                                                                            disabled={{ before: addDays(date, 10) }}
+                                                                            defaultMonth={addDays(date, 10)}
+                                                                            fromMonth={addDays(date, 10)}
                                                                             className="p-3"
                                                                             classNames={{
                                                                                 day_selected: "bg-blue-600 text-white hover:bg-blue-700 focus:bg-blue-700 rounded-lg",

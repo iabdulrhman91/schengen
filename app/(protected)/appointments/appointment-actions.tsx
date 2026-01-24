@@ -8,6 +8,7 @@ import { useState, useEffect } from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { EnglishNumberInput } from "@/components/ui/english-input";
 import { ComboboxWithCreate } from "@/components/ui/combobox-with-create";
+import { CustomDatePicker } from "@/components/ui/date-picker";
 
 interface AppointmentActionsProps {
     id: string;
@@ -34,9 +35,7 @@ export function AppointmentActions({
 }: AppointmentActionsProps) {
     const [editOpen, setEditOpen] = useState(false);
     const [isPending, setIsPending] = useState(false);
-
-    // For CustomDatePicker state in Edit Modal
-    // const [editDate, setEditDate] = useState<Date | undefined>(currentDate ? new Date(currentDate) : undefined);
+    const [editDate, setEditDate] = useState<Date | undefined>(currentDate ? new Date(currentDate) : undefined);
     const [selectedCountry, setSelectedCountry] = useState(currentCountryId);
     const [selectedLocation, setSelectedLocation] = useState(currentLocationId);
 
@@ -47,7 +46,7 @@ export function AppointmentActions({
 
     useEffect(() => {
         if (!editOpen) return;
-        // Native input with key={id} handles date reset automatically via defaultValue/key
+        setEditDate(currentDate ? new Date(currentDate) : undefined);
         setSelectedCountry(currentCountryId);
         setSelectedLocation(currentLocationId);
     }, [editOpen, editKey]);
@@ -157,13 +156,13 @@ export function AppointmentActions({
                     <div className="space-y-4">
                         <div className="space-y-2">
                             <Label>التاريخ</Label>
-                            <Input
-                                key={`date-${editKey}`}
-                                type="date"
+                            <CustomDatePicker
+                                value={editDate}
+                                onChange={setEditDate}
                                 name="date"
-                                defaultValue={currentDate}
-                                className="block w-full text-right"
                                 required
+                                placeholder="اختر تاريخ الموعد..."
+                                className="h-11 shadow-sm border-gray-200 focus:ring-2 focus:ring-blue-500"
                             />
                         </div>
                         <div className="space-y-2">

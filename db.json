@@ -217,6 +217,16 @@
             "capacity_vip": 0,
             "status": "OPEN",
             "id": "8308006"
+        },
+        {
+            "id": "appt-tcyvle",
+            "code": "APT-RJWTD",
+            "countryId": "ey2zd5b",
+            "locationId": "l1",
+            "date": "2026-01-30",
+            "capacity": 2,
+            "capacity_vip": 0,
+            "status": "OPEN"
         }
     ],
     "cases": [
@@ -281,11 +291,227 @@
                     "maritalStatus": "MARRIED",
                     "employerEn": "أرامكو",
                     "jobTitleEn": "مهندس",
-                    "sponsorship": "كفالة ذاتية"
+                    "sponsorship": "كفالة ذاتية",
+                    "appointmentDate": "2026-02-01"
                 }
             ],
             "createdAt": "2026-01-23T09:44:41.045Z",
-            "updatedAt": "2026-01-23T09:44:41.053Z"
+            "updatedAt": "2026-01-24T17:02:59.953Z"
+        },
+        {
+            "id": "case-bl1mv",
+            "fileNumber": "WIZ-BCKAG",
+            "agencyId": "tejwal",
+            "appointmentId": "0405033",
+            "phone": "",
+            "travelDate": "2026-01-24T16:21:50.528Z",
+            "returnDate": "2026-01-24T16:21:50.528Z",
+            "lockStatus": "SUBMITTED",
+            "statusId": "os-ready",
+            "pricingSnapshot": {
+                "pricingVersion": 1,
+                "countryCode": "AUTO",
+                "centerId": "AUTO",
+                "appointmentId": "0405033",
+                "seatType": "NORMAL",
+                "counts": {
+                    "adult": 1,
+                    "child": 0,
+                    "infant": 0
+                },
+                "unitPrices": {
+                    "normal": {
+                        "adult": 1600,
+                        "child": 1450,
+                        "infant": 1250
+                    },
+                    "vip": {
+                        "adult": 2000,
+                        "child": 2000,
+                        "infant": 2000
+                    }
+                },
+                "appliedFrom": {
+                    "basePriceBookId": "pb-1767699944142"
+                },
+                "totals": {
+                    "subtotal": 1600,
+                    "total": 1600,
+                    "currency": "SAR"
+                },
+                "createdAt": "2026-01-24T16:21:50.528Z"
+            },
+            "applicants": [
+                {
+                    "id": "g71xpl",
+                    "caseId": "case-bl1mv",
+                    "type": "MAIN",
+                    "nameInPassport": "",
+                    "passportNumber": "",
+                    "mobileNumber": "0",
+                    "birthDate": "",
+                    "passportIssueDate": "",
+                    "passportExpiryDate": "",
+                    "nationality": "",
+                    "nationalId": "",
+                    "gender": "",
+                    "placeOfBirthEn": "",
+                    "employerEn": "",
+                    "jobTitleEn": "",
+                    "sponsorship": "كفالة ذاتية"
+                }
+            ],
+            "createdAt": "2026-01-24T16:21:50.528Z",
+            "updatedAt": "2026-01-24T16:21:50.539Z"
+        },
+        {
+            "id": "case-f23p2i",
+            "fileNumber": "WIZ-LQNXT",
+            "agencyId": "tejwal",
+            "appointmentId": "0405033",
+            "phone": "",
+            "travelDate": "2026-01-07",
+            "returnDate": "2026-01-15",
+            "lockStatus": "SUBMITTED",
+            "statusId": "os-ready",
+            "pricingSnapshot": {
+                "pricingVersion": 1,
+                "countryCode": "AUTO",
+                "centerId": "AUTO",
+                "appointmentId": "0405033",
+                "seatType": "NORMAL",
+                "counts": {
+                    "adult": 1,
+                    "child": 0,
+                    "infant": 0
+                },
+                "unitPrices": {
+                    "normal": {
+                        "adult": 1600,
+                        "child": 1450,
+                        "infant": 1250
+                    },
+                    "vip": {
+                        "adult": 2000,
+                        "child": 2000,
+                        "infant": 2000
+                    }
+                },
+                "appliedFrom": {
+                    "basePriceBookId": "pb-1767699944142"
+                },
+                "totals": {
+                    "subtotal": 1600,
+                    "total": 1600,
+                    "currency": "SAR"
+                },
+                "createdAt": "2026-01-24T16:23:44.175Z"
+            },
+            "applicants": [
+                {
+                    "id": "hw1tbg",
+                    "caseId": "case-f23p2i",
+                    "type": "MAIN",
+                    "nameInPassport": "",
+                    "passportNumber": "",
+                    "mobileNumber": "0",
+                    "birthDate": "",
+                    "passportIssueDate": "",
+                    "passportExpiryDate": "",
+                    "nationality": "",
+                    "nationalId": "",
+                    "gender": "",
+                    "placeOfBirthEn": "",
+                    "employerEn": "",
+                    "jobTitleEn": "",
+                    "sponsorship": "كفالة ذاتية"
+                }
+            ],
+            "createdAt": "2026-01-24T16:23:44.176Z",
+            "updatedAt": "2026-01-24T16:23:44.183Z"
+        },
+        {
+            "id": "case-b3ecns",
+            "fileNumber": "WIZ-FWOMQ",
+            "agencyId": "tejwal",
+            "appointmentId": "appt-tcyvle",
+            "phone": "",
+            "travelDate": "2026-01-30",
+            "returnDate": "2026-02-07",
+            "lockStatus": "SUBMITTED",
+            "statusId": "os-ready",
+            "pricingSnapshot": {
+                "pricingVersion": 1,
+                "countryCode": "AUTO",
+                "centerId": "AUTO",
+                "appointmentId": "appt-tcyvle",
+                "seatType": "NORMAL",
+                "counts": {
+                    "adult": 2,
+                    "child": 0,
+                    "infant": 0
+                },
+                "unitPrices": {
+                    "normal": {
+                        "adult": 1600,
+                        "child": 1450,
+                        "infant": 1250
+                    },
+                    "vip": {
+                        "adult": 2000,
+                        "child": 2000,
+                        "infant": 2000
+                    }
+                },
+                "appliedFrom": {
+                    "basePriceBookId": "pb-1767699944142"
+                },
+                "totals": {
+                    "subtotal": 3200,
+                    "total": 3200,
+                    "currency": "SAR"
+                },
+                "createdAt": "2026-01-24T16:48:03.798Z"
+            },
+            "applicants": [
+                {
+                    "id": "7rksp",
+                    "caseId": "case-b3ecns",
+                    "type": "MAIN",
+                    "nameInPassport": "",
+                    "passportNumber": "",
+                    "mobileNumber": "0",
+                    "birthDate": "",
+                    "passportIssueDate": "",
+                    "passportExpiryDate": "",
+                    "nationality": "",
+                    "nationalId": "",
+                    "gender": "",
+                    "placeOfBirthEn": "",
+                    "employerEn": "",
+                    "jobTitleEn": "",
+                    "sponsorship": ""
+                },
+                {
+                    "id": "yuk3u4",
+                    "caseId": "case-b3ecns",
+                    "type": "DEPENDENT",
+                    "nameInPassport": "",
+                    "passportNumber": "",
+                    "birthDate": "",
+                    "passportIssueDate": "",
+                    "passportExpiryDate": "",
+                    "nationality": "",
+                    "nationalId": "",
+                    "gender": "",
+                    "placeOfBirthEn": "",
+                    "employerEn": "",
+                    "jobTitleEn": "",
+                    "sponsorship": ""
+                }
+            ],
+            "createdAt": "2026-01-24T16:48:03.798Z",
+            "updatedAt": "2026-01-24T16:48:03.806Z"
         }
     ],
     "amendmentRequests": [],
@@ -522,6 +748,36 @@
             "createdAt": "2026-01-23T09:44:41.057Z",
             "errorMessage": "fetch failed",
             "processedAt": "2026-01-23T09:44:41.295Z"
+        },
+        {
+            "event": "CASE_SUBMITTED",
+            "status": "FAILED",
+            "payload": "{\"case\":{\"id\":\"case-bl1mv\",\"fileNumber\":\"WIZ-BCKAG\",\"status\":\"SUBMITTED\",\"stage\":\"os-ready\"},\"agency\":{\"id\":\"tejwal\",\"name\":\"مدير النظام\"},\"appointment\":{\"id\":\"0405033\",\"code\":\"APT-AGSSL\",\"date\":\"2026-01-07\"},\"mainApplicant\":{\"id\":\"g71xpl\",\"name\":\"\"},\"meta\":{\"triggeredBy\":\"admin\",\"timestamp\":\"2026-01-24T16:21:50.542Z\"}}",
+            "id": "bcd30f8b-3f7c-4d31-a5b9-a50b7bc785ec",
+            "eventId": "e59efe53-cb4f-4ed1-888b-125ec402d278",
+            "createdAt": "2026-01-24T16:21:50.543Z",
+            "errorMessage": "fetch failed",
+            "processedAt": "2026-01-24T16:21:50.746Z"
+        },
+        {
+            "event": "CASE_SUBMITTED",
+            "status": "FAILED",
+            "payload": "{\"case\":{\"id\":\"case-f23p2i\",\"fileNumber\":\"WIZ-LQNXT\",\"status\":\"SUBMITTED\",\"stage\":\"os-ready\"},\"agency\":{\"id\":\"tejwal\",\"name\":\"مدير النظام\"},\"appointment\":{\"id\":\"0405033\",\"code\":\"APT-AGSSL\",\"date\":\"2026-01-07\"},\"mainApplicant\":{\"id\":\"hw1tbg\",\"name\":\"\"},\"meta\":{\"triggeredBy\":\"admin\",\"timestamp\":\"2026-01-24T16:23:44.184Z\"}}",
+            "id": "e4165f09-2a5f-476c-a1aa-34470f10d7f2",
+            "eventId": "d9c34ed7-e725-43fa-bb4c-57186d978e24",
+            "createdAt": "2026-01-24T16:23:44.185Z",
+            "errorMessage": "fetch failed",
+            "processedAt": "2026-01-24T16:23:44.349Z"
+        },
+        {
+            "event": "CASE_SUBMITTED",
+            "status": "FAILED",
+            "payload": "{\"case\":{\"id\":\"case-b3ecns\",\"fileNumber\":\"WIZ-FWOMQ\",\"status\":\"SUBMITTED\",\"stage\":\"os-ready\"},\"agency\":{\"id\":\"tejwal\",\"name\":\"مدير النظام\"},\"appointment\":{\"id\":\"appt-tcyvle\",\"code\":\"APT-RJWTD\",\"date\":\"2026-01-30\"},\"mainApplicant\":{\"id\":\"7rksp\",\"name\":\"\"},\"meta\":{\"triggeredBy\":\"admin\",\"timestamp\":\"2026-01-24T16:48:03.812Z\"}}",
+            "id": "c399d6b3-b3d2-49f8-a07e-b19c2252e0d6",
+            "eventId": "6e5b66dd-473d-4a0c-8d82-0d5bfb810b83",
+            "createdAt": "2026-01-24T16:48:03.812Z",
+            "errorMessage": "fetch failed",
+            "processedAt": "2026-01-24T16:48:04.018Z"
         }
     ],
     "priceBooks": [
