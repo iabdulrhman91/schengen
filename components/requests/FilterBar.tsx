@@ -39,8 +39,21 @@ export function FilterBar({ filterSpec, onChange, availableProperties }: FilterB
     // Close menus on outside click
     useEffect(() => {
         function handleClick(e: MouseEvent) {
-            if (addMenuRef.current && !addMenuRef.current.contains(e.target as Node)) setIsAddMenuOpen(false);
-            if (pillPopRef.current && !pillPopRef.current.contains(e.target as Node)) setActivePillPop(null);
+            const target = e.target as Node;
+
+            // Check if click is inside a date picker popover (has data-radix-popper-content-wrapper attribute or is inside one)
+            let element = target as HTMLElement;
+            while (element) {
+                if (element.hasAttribute?.('data-radix-popper-content-wrapper') ||
+                    element.getAttribute?.('role') === 'dialog' ||
+                    element.classList?.contains('date-picker-popover')) {
+                    return; // Don't close if clicking inside date picker
+                }
+                element = element.parentElement as HTMLElement;
+            }
+
+            if (addMenuRef.current && !addMenuRef.current.contains(target)) setIsAddMenuOpen(false);
+            if (pillPopRef.current && !pillPopRef.current.contains(target)) setActivePillPop(null);
         }
         document.addEventListener("mousedown", handleClick);
         return () => document.removeEventListener("mousedown", handleClick);

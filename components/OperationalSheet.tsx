@@ -7,7 +7,7 @@ import {
     UserCircle, Search, EyeOff, Trash2, GripHorizontal,
     MoreHorizontal, CheckSquare, Info, Eye, X, ArrowLeft,
     Maximize2, ExternalLink, SortAsc, SortDesc, Circle, PanelLeft,
-    GripVertical, Copy, Undo2, Redo2, RotateCcw, Briefcase, Heart
+    GripVertical, Copy, Undo2, Redo2, RotateCcw, Briefcase, Heart, Columns3
 } from "lucide-react";
 
 // Notion-style icon wrapper to ensure consistency
@@ -366,8 +366,7 @@ function SortableRow({
                     </td>
                 );
             })}
-            <td className="w-24 border-gray-100"></td>
-            <td className="grow"></td>
+            <td className="grow bg-white border-b border-gray-100 h-[41px]"></td>
         </tr>
     );
 }
@@ -387,6 +386,15 @@ export function OperationalSheet({
 }) {
     const router = useRouter();
     const [columns, setColumns] = useState<Column[]>(enrichColumns(DEFAULT_COLUMNS));
+    const [isColumnsLoaded, setIsColumnsLoaded] = useState(false);
+    const isInitialMount = useRef(true);
+
+    // Helper to save columns explicitly
+    const saveColumnsToStorage = (cols: Column[]) => {
+        if (typeof window === 'undefined') return;
+        const serializableCols = cols.map(({ icon, ...rest }) => rest);
+        localStorage.setItem('tejwal_ops_sheet_cols', JSON.stringify(serializableCols));
+    };
 
     useEffect(() => {
         const saved = localStorage.getItem('tejwal_ops_sheet_cols');
@@ -406,11 +414,19 @@ export function OperationalSheet({
                         merged.push(defCol);
                     }
                 });
+
+                // Set columns and mark as loaded
                 setColumns(enrichColumns(merged));
             } catch (e) {
                 console.error("Failed to load columns", e);
             }
         }
+
+        // Use a small delay to ensure React has flushed the setColumns before showing the table
+        setTimeout(() => {
+            setIsColumnsLoaded(true);
+            isInitialMount.current = false;
+        }, 50);
     }, []);
 
     // Helper to format ISO dates to YYYY-MM-DD
@@ -553,6 +569,45 @@ export function OperationalSheet({
     const [searchQuery, setSearchQuery] = useState("");
     const [isFilterBarOpen, setIsFilterBarOpen] = useState(false);
 
+    // Load saved filters from localStorage on mount
+    useEffect(() => {
+        const savedFilters = localStorage.getItem('tejwal_saved_filters');
+        if (savedFilters) {
+            try {
+                const parsed = JSON.parse(savedFilters);
+                setFilterSpec(parsed);
+            } catch (e) {
+                console.error('Failed to load saved filters', e);
+            }
+        }
+    }, []);
+
+    // Save filters to localStorage whenever they change
+    useEffect(() => {
+        if (filterSpec.filters.length > 0) {
+            localStorage.setItem('tejwal_saved_filters', JSON.stringify(filterSpec));
+        }
+    }, [filterSpec]);
+
+    // Reset filters function
+    const resetFilters = () => {
+        setFilterSpec({ type: "group", operator: "and", filters: [] });
+        setSearchQuery("");
+        localStorage.removeItem('tejwal_saved_filters');
+    };
+
+    // Reset columns to default
+    const resetColumns = () => {
+        setColumns(enrichColumns(DEFAULT_COLUMNS));
+    };
+
+    // Centralized saving Effect
+    useEffect(() => {
+        if (!isInitialMount.current && isColumnsLoaded && !resizingCol) {
+            saveColumnsToStorage(columns);
+        }
+    }, [columns, resizingCol, isColumnsLoaded]);
+
     const filteredCases = useMemo(() => {
         return cases.filter(row => {
             // Memory filter (Notion-like)
@@ -574,6 +629,17 @@ export function OperationalSheet({
     const colOptionsRef = useRef<HTMLDivElement>(null);
     const visibilityMenuRef = useRef<HTMLDivElement>(null);
     const statusPickerRef = useRef<HTMLDivElement>(null);
+
+    // Close menus on outside click
+    useEffect(() => {
+        function handleClickOutside(event: MouseEvent) {
+            if (colOptionsRef.current && !colOptionsRef.current.contains(event.target as Node)) setIsColMenuOpen(null);
+            if (visibilityMenuRef.current && !visibilityMenuRef.current.contains(event.target as Node)) setIsVisibilityMenuOpen(false);
+            if (statusPickerRef.current && !statusPickerRef.current.contains(event.target as Node)) setActiveStatusPicker(null);
+        }
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
 
     const handleDragStart = (id: string) => {
         setDraggedCol(id);
@@ -628,11 +694,6 @@ export function OperationalSheet({
             window.removeEventListener('mouseup', handleMouseUp);
         };
     }, [resizingCol]);
-
-    useEffect(() => {
-        const toSave = columns.map(({ icon, ...rest }) => rest);
-        localStorage.setItem('tejwal_ops_sheet_cols', JSON.stringify(toSave));
-    }, [columns]);
 
     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
@@ -924,6 +985,77 @@ export function OperationalSheet({
                             عامل التصفية
                         </button>
 
+                        <div className="relative">
+                            <button
+                                onClick={() => setIsVisibilityMenuOpen(!isVisibilityMenuOpen)}
+                                className={cn(
+                                    "flex items-center gap-1.5 px-3 py-1 hover:bg-gray-100 rounded-md transition-all text-[13px]",
+                                    isVisibilityMenuOpen ? "bg-blue-50 text-blue-600 hover:bg-blue-100" : "text-gray-500"
+                                )}
+                            >
+                                <Columns3 size={14} />
+                                الأعمدة
+                            </button>
+
+                            {/* --- COLUMNS VISIBILITY MENU --- */}
+                            {isVisibilityMenuOpen && (
+                                <div ref={visibilityMenuRef} className="absolute top-full right-0 mt-2 w-72 bg-white shadow-2xl border border-gray-200 rounded-xl z-[200] overflow-hidden animate-in fade-in zoom-in-95">
+                                    <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
+                                        <div className="flex items-center gap-2 text-[11px] font-black text-gray-400 uppercase tracking-widest">
+                                            <Columns3 size={14} />
+                                            إدارة الأعمدة
+                                        </div>
+                                        <div className="flex items-center gap-1">
+                                            <button
+                                                onClick={resetColumns}
+                                                title="إعادة تعيين الأعمدة للافتراضي"
+                                                className="p-1 hover:bg-blue-50 text-blue-500 rounded transition-colors"
+                                            >
+                                                <RotateCcw size={14} />
+                                            </button>
+                                            <button
+                                                onClick={() => setIsVisibilityMenuOpen(false)}
+                                                className="p-1 hover:bg-red-50 text-red-500 rounded transition-colors"
+                                            >
+                                                <X size={14} />
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div className="max-h-96 overflow-y-auto p-2">
+                                        {columns.map(col => (
+                                            <div
+                                                key={col.id}
+                                                className="flex items-center justify-between px-3 py-2 hover:bg-gray-50 rounded-lg transition-colors group"
+                                            >
+                                                <div className="flex items-center gap-2.5 flex-1">
+                                                    <span className="text-gray-400 group-hover:text-gray-600 transition-colors">{col.icon}</span>
+                                                    <span className="text-[13px] text-gray-700 font-medium">{col.label}</span>
+                                                </div>
+                                                <button
+                                                    onClick={() => toggleVisibility(col.id)}
+                                                    className={cn(
+                                                        "p-1 rounded transition-all",
+                                                        col.visible ? "text-blue-500 hover:bg-blue-50" : "text-gray-300 hover:bg-gray-100"
+                                                    )}
+                                                    title={col.visible ? "إخفاء العمود" : "إظهار العمود"}
+                                                >
+                                                    {col.visible ? <Eye size={14} /> : <EyeOff size={14} />}
+                                                </button>
+                                            </div>
+                                        ))}
+                                    </div>
+                                    <div className="px-4 py-3 border-t border-gray-100 bg-gray-50">
+                                        <button
+                                            onClick={() => setColumns(columns.map(c => c.id === "id_req" ? c : ({ ...c, visible: true })))}
+                                            className="w-full text-[11px] font-bold text-blue-500 hover:text-blue-700 transition-colors text-center"
+                                        >
+                                            إظهار جميع الأعمدة
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+
                         <div className="w-px h-4 bg-gray-200 mx-1" />
 
                         {/* Undo/Redo Controls */}
@@ -951,6 +1083,21 @@ export function OperationalSheet({
                                 <Icon icon={Redo2} size={16} />
                             </button>
                         </div>
+
+                        {/* Reset Filters Button */}
+                        {(filterSpec.filters.length > 0 || searchQuery) && (
+                            <>
+                                <div className="w-px h-4 bg-gray-200 mx-1" />
+                                <button
+                                    onClick={resetFilters}
+                                    title="إعادة تعيين الفلاتر والبحث"
+                                    className="flex items-center gap-1.5 px-2.5 py-1 text-[13px] text-red-500 hover:bg-red-50 rounded-md transition-all font-medium"
+                                >
+                                    <RotateCcw size={14} />
+                                    إعادة تعيين
+                                </button>
+                            </>
+                        )}
                     </div>
                 </div>
 
@@ -967,55 +1114,23 @@ export function OperationalSheet({
                         }))}
                     />
                 )}
+
+
             </header>
 
             {/* --- MAIN CONTENT AREA --- */}
             <main className="flex-1 flex flex-col overflow-auto border-t border-gray-100 w-full relative">
                 <div className="inline-block align-middle min-w-full">
-                    {!mounted ? (
-                        <table className="min-w-full border-separate border-spacing-0 table-fixed">
-                            <thead>
-                                <tr className="border-b border-gray-100 bg-white group/head">
-                                    <th className="w-16 border-b border-l border-gray-100 bg-white sticky right-0 z-30 transition-colors group-hover/head:bg-gray-50/30 flex items-center justify-center h-[41px]">
-                                        <Icon icon={Sigma} className="text-gray-400 group-hover/head:text-gray-900 transition-colors" />
-                                    </th>
-                                    {columns.map(col => (
-                                        <th key={col.id} className="border-b border-l border-gray-100 bg-white px-3 py-2 text-right relative group/col">
-                                            <div className="flex items-center gap-2 text-gray-400">
-                                                <span>{col.icon}</span>
-                                                <span className="text-[12px] font-bold truncate">{col.label}</span>
-                                            </div>
-                                        </th>
-                                    ))}
-                                    <th className="grow bg-white border-b border-gray-100"></th>
-                                </tr>
-                            </thead>
-                            <tbody className="bg-white">
-                                {filteredCases.map((record, idx) => (
-                                    <SortableRow
-                                        key={record.id}
-                                        record={record}
-                                        idx={idx}
-                                        columns={columns}
-                                        selectedRows={selectedRows}
-                                        toggleSelectRow={toggleSelectRow}
-                                        deleteRow={deleteRow}
-                                        duplicateRow={duplicateRow}
-                                        editingCell={editingCell}
-                                        setEditingCell={setEditingCell}
-                                        activeStatusPicker={activeStatusPicker}
-                                        setActiveStatusPicker={setActiveStatusPicker}
-                                        updateCell={updateCell}
-                                        STATUSES={STATUSES}
-                                        handleStatusUpdate={handleStatusUpdate}
-                                        setSelectedCase={setSelectedCase}
-                                        statusPickerRef={statusPickerRef}
-                                        hoveredCaseId={hoveredCaseId}
-                                        setHoveredCaseId={setHoveredCaseId}
-                                    />
-                                ))}
-                            </tbody>
-                        </table>
+                    {(!mounted || !isColumnsLoaded) ? (
+                        <div className="flex-1 flex items-center justify-center py-20 min-h-[400px]">
+                            <div className="flex flex-col items-center gap-4">
+                                <div className="w-8 h-8 border-2 border-blue-600/10 border-t-blue-600 rounded-full animate-spin" />
+                                <div className="flex flex-col items-center gap-1">
+                                    <span className="text-[13px] font-bold text-gray-900">جاري تهيئة الجدول...</span>
+                                    <span className="text-[11px] text-gray-400 font-medium">يتم استعادة إعداداتك المفضلة</span>
+                                </div>
+                            </div>
+                        </div>
                     ) : (
                         <DndContext
                             sensors={sensors}
@@ -1086,105 +1201,7 @@ export function OperationalSheet({
                                                 )}
                                             </th>
                                         ))}
-                                        <th className="w-24 border-b border-gray-100 bg-white relative z-20">
-                                            <div className="flex items-center h-full px-2 gap-1 relative">
-                                                <button onClick={() => setIsVisibilityMenuOpen(!isVisibilityMenuOpen)} className="p-1.5 rounded-md text-gray-400 hover:text-gray-900 hover:bg-gray-100 transition-all"><MoreHorizontal size={16} /></button>
-
-
-                                                {/* --- VISIBILITY MENU --- */}
-                                                {isVisibilityMenuOpen && (
-                                                    <div ref={visibilityMenuRef} className="absolute left-0 top-full mt-2 w-72 bg-white shadow-[0_10px_40px_rgba(0,0,0,0.12)] border border-gray-200 rounded-2xl z-[150] overflow-hidden flex flex-col animate-in fade-in zoom-in-95 backdrop-blur-xl">
-                                                        {/* Header */}
-                                                        <div className="flex items-center justify-between px-4 py-3 border-b border-gray-50">
-                                                            <div className="flex items-center gap-2">
-                                                                <ArrowLeft size={16} className="text-gray-400 cursor-pointer hover:text-gray-900 transition-colors rotate-180" onClick={() => setIsVisibilityMenuOpen(false)} />
-                                                                <span className="text-[13px] font-bold text-gray-900">رؤية الخاصية</span>
-                                                            </div>
-                                                            <X size={16} className="text-gray-300 cursor-pointer hover:text-gray-900 transition-colors" onClick={() => setIsVisibilityMenuOpen(false)} />
-                                                        </div>
-
-                                                        <div className="max-h-[400px] overflow-auto scrollbar-hide py-2">
-                                                            {/* Visible Section */}
-                                                            <div className="px-4 py-1.5 flex items-center justify-between group/sec">
-                                                                <span className="text-[10px] font-black text-gray-300 uppercase tracking-widest">يظهر في الجدول</span>
-                                                                <button
-                                                                    onClick={() => setColumns(columns.map(c => ({ ...c, visible: false })))}
-                                                                    className="text-[10px] font-bold text-blue-500 hover:text-blue-700 opacity-0 group-hover/sec:opacity-100 transition-all focus:outline-none"
-                                                                >
-                                                                    إخفاء الكل
-                                                                </button>
-                                                            </div>
-                                                            {columns.filter(c => c.visible).map(col => (
-                                                                <div
-                                                                    key={col.id}
-                                                                    draggable
-                                                                    onDragStart={() => handleDragStart(col.id)}
-                                                                    onDragEnd={() => setDraggedCol(null)}
-                                                                    onDragOver={handleDragOver}
-                                                                    onDrop={() => handleDrop(col.id)}
-                                                                    className={cn(
-                                                                        "flex items-center gap-2 px-3 py-1.5 hover:bg-gray-50 transition-colors group/item cursor-move",
-                                                                        draggedCol === col.id && "opacity-20"
-                                                                    )}
-                                                                >
-                                                                    <GripHorizontal size={14} className="text-gray-200" />
-                                                                    <button
-                                                                        onClick={() => toggleVisibility(col.id)}
-                                                                        className={cn("p-1 hover:bg-gray-100 rounded transition-colors", col.id === "id_req" ? "text-blue-500 cursor-default" : "text-gray-400 hover:text-gray-900")}
-                                                                        disabled={col.id === "id_req"}
-                                                                    >
-                                                                        <Eye size={14} />
-                                                                    </button>
-                                                                    <span className="shrink-0 text-gray-400">{col.icon}</span>
-                                                                    <span className="flex-1 text-[13px] text-gray-700 font-medium text-right truncate">{col.label}</span>
-                                                                </div>
-                                                            ))}
-
-                                                            <div className="h-4" />
-
-                                                            {/* Hidden Section */}
-                                                            <div className="px-4 py-1.5 flex items-center justify-between group/sec">
-                                                                <span className="text-[10px] font-black text-gray-300 uppercase tracking-widest">مخفي في الجدول</span>
-                                                                <button
-                                                                    onClick={() => setColumns(columns.map(c => c.id === "id_req" ? c : ({ ...c, visible: true })))}
-                                                                    className="text-[10px] font-bold text-blue-500 hover:text-blue-700 opacity-0 group-hover/sec:opacity-100 transition-all focus:outline-none"
-                                                                >
-                                                                    إظهار الكل
-                                                                </button>
-                                                            </div>
-                                                            {columns.filter(c => !c.visible).map(col => (
-                                                                <div
-                                                                    key={col.id}
-                                                                    draggable
-                                                                    onDragStart={() => handleDragStart(col.id)}
-                                                                    onDragEnd={() => setDraggedCol(null)}
-                                                                    onDragOver={handleDragOver}
-                                                                    onDrop={() => handleDrop(col.id)}
-                                                                    className={cn(
-                                                                        "flex items-center gap-2 px-3 py-1.5 hover:bg-gray-50 transition-colors group/item cursor-move opacity-60 grayscale-[0.5]",
-                                                                        draggedCol === col.id && "opacity-20"
-                                                                    )}
-                                                                >
-                                                                    <GripHorizontal size={14} className="text-gray-200" />
-                                                                    <button
-                                                                        onClick={() => toggleVisibility(col.id)}
-                                                                        className={cn("p-1 hover:bg-gray-100 rounded transition-colors", col.id === "id_req" ? "text-blue-500 cursor-default" : "text-gray-300 hover:text-gray-600")}
-                                                                        disabled={col.id === "id_req"}
-                                                                    >
-                                                                        <EyeOff size={14} />
-                                                                    </button>
-                                                                    <span className="shrink-0 text-gray-400">{col.icon}</span>
-                                                                    <span className="flex-1 text-[13px] text-gray-500 font-medium text-right truncate">{col.label}</span>
-                                                                </div>
-                                                            ))}
-                                                        </div>
-                                                    </div>
-                                                )}
-
-
-                                            </div>
-                                        </th>
-                                        <th className="grow bg-white border-b border-gray-100"></th>
+                                        <th className="grow bg-white border-b border-gray-100 h-[41px]"></th>
                                     </tr>
                                 </thead>
                                 <tbody className="bg-white">
@@ -1224,7 +1241,7 @@ export function OperationalSheet({
             </main>
 
             {/* --- SIDE PEEK PANEL --- */}
-            <div className={cn("fixed top-0 left-0 bottom-0 w-[500px] bg-white shadow-[-20px_0_50px_rgba(0,0,0,0.1)] z-[200] border-r border-gray-200 transition-transform duration-300 ease-out transform flex flex-col p-8", selectedCase ? "translate-x-0" : "-translate-x-full")}>
+            <div className={cn("fixed top-0 left-0 bottom-0 w-[500px] bg-white shadow-[-20px_0_50px_rgba(0,0,0,0.1)] z-[200] border-r border-gray-200 transition-transform duration-300 ease-out transform flex flex-col p-8", selectedCase ? "translate-x-0" : "-translate-x-full")} >
                 <div className="flex items-center justify-between mb-8">
                     <div className="flex items-center gap-4">
                         <button onClick={() => setSelectedCase(null)} className="p-2 hover:bg-gray-100 rounded-lg text-gray-400 hover:text-gray-900 transition-all">
@@ -1270,7 +1287,7 @@ export function OperationalSheet({
                         </div>
                     ))}
                 </div>
-            </div>
+            </div >
 
             {selectedCase && <div className="fixed inset-0 bg-black/5 backdrop-blur-[2px] z-[190] animate-in fade-in" onClick={() => setSelectedCase(null)} />}
 
@@ -1279,110 +1296,111 @@ export function OperationalSheet({
 
 
             {/* --- FLOATING BULK ACTIONS BAR --- */}
-            {selectedRows.size > 0 && (
-                <div className="fixed bottom-12 left-1/2 -translate-x-1/2 bg-white border border-gray-200 shadow-[0_12px_40px_rgba(0,0,0,0.12)] rounded-xl flex items-center gap-1 p-1 z-[300] animate-in fade-in slide-in-from-bottom-4 duration-200">
-                    <div className="flex items-center gap-2 px-3 py-1.5 border-l border-gray-100 ml-1">
-                        <span className="bg-blue-600 text-white text-[10px] font-black px-1.5 py-0.5 rounded-md min-w-[20px] text-center">
-                            {selectedRows.size}
-                        </span>
-                        <span className="text-[13px] font-bold text-gray-700">مختار</span>
-                    </div>
-
-                    <div className="flex items-center">
-                        {/* Edit Property */}
-                        <div className="relative">
-                            <button
-                                onClick={() => setIsBulkEditOpen(!isBulkEditOpen)}
-                                className={cn(
-                                    "flex items-center gap-2 px-3 py-1.5 hover:bg-gray-100 rounded-lg transition-all text-[13px] font-bold",
-                                    isBulkEditOpen ? "bg-gray-100 text-gray-900" : "text-gray-500"
-                                )}
-                            >
-                                <Icon icon={AlignLeft} size={14} className="text-gray-400" />
-                                <span>تعديل خاصية</span>
-                            </button>
-
-                            {isBulkEditOpen && (
-                                <div
-                                    ref={bulkEditRef}
-                                    className="absolute bottom-full mb-2 right-0 w-52 bg-white shadow-2xl border border-gray-200 rounded-xl overflow-hidden py-1.5 animate-in fade-in zoom-in-95"
-                                >
-                                    {!bulkEditCol ? (
-                                        <>
-                                            <div className="px-3 py-1.5 text-[10px] font-black text-gray-300 uppercase tracking-widest text-right">اختر الخاصية للتعديل</div>
-                                            {columns.map(col => (
-                                                <button
-                                                    key={col.id}
-                                                    onClick={() => setBulkEditCol(col.id)}
-                                                    className="w-full flex items-center gap-3 px-3 py-2 hover:bg-gray-50 text-[13px] text-gray-600 text-right group"
-                                                >
-                                                    <span className="text-gray-400 group-hover:text-gray-900 transition-colors">{col.icon}</span>
-                                                    <span className="flex-1 font-medium">{col.label}</span>
-                                                </button>
-                                            ))}
-                                        </>
-                                    ) : (
-                                        <div className="p-1">
-                                            <button onClick={() => setBulkEditCol(null)} className="w-full flex items-center gap-2 px-3 py-1 text-[10px] text-blue-500 font-bold hover:underline mb-1">
-                                                <Icon icon={ArrowLeft} size={10} className="rotate-180" /> رجوع
-                                            </button>
-                                            {columns.find(c => c.id === bulkEditCol)?.type === 'status' ? (
-                                                STATUSES.map(s => (
-                                                    <button
-                                                        key={s.id}
-                                                        onClick={() => bulkUpdateField(bulkEditCol!, s.id)}
-                                                        className="w-full flex items-center gap-2.5 px-3 py-1.5 hover:bg-gray-50 transition-colors text-[13px] font-medium text-gray-700 text-right group"
-                                                    >
-                                                        <div className={cn("w-1.5 h-1.5 rounded-full", s.dot)} />
-                                                        <span>{s.label}</span>
-                                                    </button>
-                                                ))
-                                            ) : (
-                                                <div className="p-2">
-                                                    <input
-                                                        autoFocus
-                                                        className="w-full px-2 py-1.5 bg-gray-50 border-none rounded text-[13px] outline-none"
-                                                        placeholder="أدخل القيمة الجديدة..."
-                                                        onKeyDown={(e) => {
-                                                            if (e.key === 'Enter') bulkUpdateField(bulkEditCol!, (e.target as HTMLInputElement).value);
-                                                        }}
-                                                    />
-                                                </div>
-                                            )}
-                                        </div>
-                                    )}
-                                </div>
-                            )}
+            {
+                selectedRows.size > 0 && (
+                    <div className="fixed bottom-12 left-1/2 -translate-x-1/2 bg-white border border-gray-200 shadow-[0_12px_40px_rgba(0,0,0,0.12)] rounded-xl flex items-center gap-1 p-1 z-[300] animate-in fade-in slide-in-from-bottom-4 duration-200">
+                        <div className="flex items-center gap-2 px-3 py-1.5 border-l border-gray-100 ml-1">
+                            <span className="bg-blue-600 text-white text-[10px] font-black px-1.5 py-0.5 rounded-md min-w-[20px] text-center">
+                                {selectedRows.size}
+                            </span>
+                            <span className="text-[13px] font-bold text-gray-700">مختار</span>
                         </div>
 
-                        <button
-                            onClick={bulkDuplicate}
-                            className="flex items-center gap-2 px-3 py-1.5 hover:bg-gray-100 text-gray-500 rounded-lg transition-all text-[13px] font-bold group"
-                        >
-                            <Icon icon={Copy} size={14} className="text-gray-400 group-hover:text-gray-900" />
-                            <span>تكرار</span>
-                        </button>
+                        <div className="flex items-center">
+                            {/* Edit Property */}
+                            <div className="relative">
+                                <button
+                                    onClick={() => setIsBulkEditOpen(!isBulkEditOpen)}
+                                    className={cn(
+                                        "flex items-center gap-2 px-3 py-1.5 hover:bg-gray-100 rounded-lg transition-all text-[13px] font-bold",
+                                        isBulkEditOpen ? "bg-gray-100 text-gray-900" : "text-gray-500"
+                                    )}
+                                >
+                                    <Icon icon={AlignLeft} size={14} className="text-gray-400" />
+                                    <span>تعديل خاصية</span>
+                                </button>
 
-                        <button
-                            onClick={bulkDelete}
-                            className="flex items-center gap-2 px-3 py-1.5 hover:bg-red-50 text-red-500 rounded-lg transition-all text-[13px] font-bold group"
-                        >
-                            <Icon icon={Trash2} size={14} className="text-red-300 group-hover:text-red-500" />
-                            <span>حذف</span>
-                        </button>
+                                {isBulkEditOpen && (
+                                    <div
+                                        ref={bulkEditRef}
+                                        className="absolute bottom-full mb-2 right-0 w-52 bg-white shadow-2xl border border-gray-200 rounded-xl overflow-hidden py-1.5 animate-in fade-in zoom-in-95"
+                                    >
+                                        {!bulkEditCol ? (
+                                            <>
+                                                <div className="px-3 py-1.5 text-[10px] font-black text-gray-300 uppercase tracking-widest text-right">اختر الخاصية للتعديل</div>
+                                                {columns.map(col => (
+                                                    <button
+                                                        key={col.id}
+                                                        onClick={() => setBulkEditCol(col.id)}
+                                                        className="w-full flex items-center gap-3 px-3 py-2 hover:bg-gray-50 text-[13px] text-gray-600 text-right group"
+                                                    >
+                                                        <span className="text-gray-400 group-hover:text-gray-900 transition-colors">{col.icon}</span>
+                                                        <span className="flex-1 font-medium">{col.label}</span>
+                                                    </button>
+                                                ))}
+                                            </>
+                                        ) : (
+                                            <div className="p-1">
+                                                <button onClick={() => setBulkEditCol(null)} className="w-full flex items-center gap-2 px-3 py-1 text-[10px] text-blue-500 font-bold hover:underline mb-1">
+                                                    <Icon icon={ArrowLeft} size={10} className="rotate-180" /> رجوع
+                                                </button>
+                                                {columns.find(c => c.id === bulkEditCol)?.type === 'status' ? (
+                                                    STATUSES.map(s => (
+                                                        <button
+                                                            key={s.id}
+                                                            onClick={() => bulkUpdateField(bulkEditCol!, s.id)}
+                                                            className="w-full flex items-center gap-2.5 px-3 py-1.5 hover:bg-gray-50 transition-colors text-[13px] font-medium text-gray-700 text-right group"
+                                                        >
+                                                            <div className={cn("w-1.5 h-1.5 rounded-full", s.dot)} />
+                                                            <span>{s.label}</span>
+                                                        </button>
+                                                    ))
+                                                ) : (
+                                                    <div className="p-2">
+                                                        <input
+                                                            autoFocus
+                                                            className="w-full px-2 py-1.5 bg-gray-50 border-none rounded text-[13px] outline-none"
+                                                            placeholder="أدخل القيمة الجديدة..."
+                                                            onKeyDown={(e) => {
+                                                                if (e.key === 'Enter') bulkUpdateField(bulkEditCol!, (e.target as HTMLInputElement).value);
+                                                            }}
+                                                        />
+                                                    </div>
+                                                )}
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
+                            </div>
 
-                        <div className="w-px h-4 bg-gray-100 mx-1" />
+                            <button
+                                onClick={bulkDuplicate}
+                                className="flex items-center gap-2 px-3 py-1.5 hover:bg-gray-100 text-gray-500 rounded-lg transition-all text-[13px] font-bold group"
+                            >
+                                <Icon icon={Copy} size={14} className="text-gray-400 group-hover:text-gray-900" />
+                                <span>تكرار</span>
+                            </button>
 
-                        <button
-                            onClick={() => setSelectedRows(new Set())}
-                            className="px-3 py-1.5 hover:bg-gray-100 text-gray-400 rounded-lg transition-all text-[13px] font-bold"
-                        >
-                            إغلاق
-                        </button>
+                            <button
+                                onClick={bulkDelete}
+                                className="flex items-center gap-2 px-3 py-1.5 hover:bg-red-50 text-red-500 rounded-lg transition-all text-[13px] font-bold group"
+                            >
+                                <Icon icon={Trash2} size={14} className="text-red-300 group-hover:text-red-500" />
+                                <span>حذف</span>
+                            </button>
+
+                            <div className="w-px h-4 bg-gray-100 mx-1" />
+
+                            <button
+                                onClick={() => setSelectedRows(new Set())}
+                                className="px-3 py-1.5 hover:bg-gray-100 text-gray-400 rounded-lg transition-all text-[13px] font-bold"
+                            >
+                                إغلاق
+                            </button>
+                        </div>
                     </div>
-                </div>
-            )}
-
+                )
+            }
         </div>
     );
 }
